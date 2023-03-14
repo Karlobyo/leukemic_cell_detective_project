@@ -1,1 +1,1 @@
-leukemic_cell_detective
+leukemic_det

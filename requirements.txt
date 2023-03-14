@@ -1,4 +1,19 @@
-pandas
-ipykernel
-ipython
-jupyter notebook
+python-dotenv
+
+streamlit
+colorama
+numpy==1.23.5
+pandas==1.5.3
+tensorflow
+keras
+scikit-learn==1.2.1
+
+google-cloud-bigquery
+google-cloud-storage
+pyarrow
+
+mlflow==2.1.1
+
+fastapi
+pytz
+uvicorn
