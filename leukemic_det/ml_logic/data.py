@@ -14,7 +14,8 @@ from params import *
 credentials_path = '/Users/carlobarbini/Documents//Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
 
 # Create a client object using the credentials file
-client = storage.Client.from_service_account_json(credentials_path)
+#client = storage.Client.from_service_account_json(credentials_path)
+client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
 
