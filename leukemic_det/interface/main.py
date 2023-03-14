@@ -100,7 +100,7 @@ def train() -> float:
     return val_accuracy
     
 
-@mlflow_run
+#@mlflow_run
 def evaluate(stage: str = "Production") -> float:
     """
     Evaluate the performance of the latest production model on processed data
@@ -142,7 +142,7 @@ def pred(X_pred: np.ndarray = None) -> int:
     from leukemic_det.ml_logic.preprocessor import preprocess_data
 
     if X_pred is None:
-       X_pred = preprocess_data_base()
+       X_pred = preprocess()
 
     model = load_model()
     assert model is not None

@@ -11,7 +11,7 @@ from google.cloud import storage
 from params import *
 
 # Set path to your service account credentials file
-credentials_path = '/Users/carlobarbini/Documents/Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
+credentials_path = '/Users/carlobarbini/Documents//Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
 
 # Create a client object using the credentials file
 client = storage.Client.from_service_account_json(credentials_path)

@@ -31,7 +31,7 @@ def load_base_model():
 
     model.add(layers.Dense(1, activation='sigmoid'))
 
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy', 'precision', 'recall'])
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     return model
 
@@ -40,7 +40,7 @@ def load_base_model():
 def evaluate_model(model: models,
                    X: np.ndarray,
                    y: np.ndarray,
-                   batch_size=64) -> tuple[models, dict]:
+                   batch_size=64):
     """
     Evaluate trained model performance on dataset
     """
@@ -62,6 +62,6 @@ def evaluate_model(model: models,
     loss = metrics["loss"]
     accuracy = metrics["accuracy"]
 
-    print(f"✅ model evaluated: mae {round(mae, 2)}")
+    print(f"✅ model evaluated: accuracy {round(accuracy, 2)}")
 
-    return metrics
+    return [loss, accuracy]
