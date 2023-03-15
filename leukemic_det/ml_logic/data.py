@@ -11,13 +11,10 @@ from google.cloud import storage
 from params import *
 
 # Set path to your service account credentials file
-#credentials_path = '/Users/carlobarbini/Documents//Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
-#credentials_path='/Users/carlobarbini/leukemic_cell_detective_project/leukemic_det/carolingio/le-wagon-1-369318-fb5bec66ff4e.json'
-credentials_path = 'leukemic_det/carolingio/le-wagon-1-369318-fb5bec66ff4e.json'
-client = storage.Client.from_service_account_json(credentials_path)
+client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-
+# print(credentials_path)
 
 def get_path_image(folder):
     image_paths = []
@@ -173,43 +170,43 @@ def process_image(row):
     return cv.imdecode(nparr, cv.IMREAD_COLOR)
     
     
-def multi_treading_cache():
-    img_list_2 = [] # multi-threading
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_row = {executor.submit(process_image, row): row for _, row in data_s.iterrows()}
-        for future in concurrent.futures.as_completed(future_to_row):
-            try:
+# def multi_treading_cache():
+#     img_list_2 = [] # multi-threading
+#     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+#         future_to_row = {executor.submit(process_image, row): row for _, row in data_s.iterrows()}
+#         for future in concurrent.futures.as_completed(future_to_row):
+#             try:
                 
-                cache = {}
+#                 cache = {}
 
-                for i in range(len(data_s)):
-                    blob_name = sample_df['img_data'][i]
-                    if blob_name in cache:
-                        image = cache[blob_name]
-                    else:
-                        image = future.result()
+#                 for i in range(len(data_s)):
+#                     blob_name = sample_df['img_data'][i]
+#                     if blob_name in cache:
+#                         image = cache[blob_name]
+#                     else:
+#                         image = future.result()
 
-                    img_list_2.append(image)
+#                     img_list_2.append(image)
                 
-            except Exception as exc:
-                print(f'Error processing image: {exc}')
+#             except Exception as exc:
+#                 print(f'Error processing image: {exc}')
                 
                 
 
-def generate_crop_imgs():
-    img_list = []
-    for i in range(len(img_data)):
-        image = cv.imread(data["img_data"][i])
-        gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        thresh = cv.threshold(gray, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)[1]
+# def generate_crop_imgs():
+#     img_list = []
+#     for i in range(len(img_data)):
+#         image = cv.imread(data["img_data"][i])
+#         gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+#         thresh = cv.threshold(gray, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)[1]
 
-        result = cv.bitwise_and(image, image, mask=thresh)
-        result[thresh==0] = [255,255,255] 
-        (x, y, z_) = np.where(result > 0)
-        mnx = (np.min(x))
-        mxx = (np.max(x))
-        mny = (np.min(y))
-        mxy = (np.max(y))
-        crop_img = image[mnx:mxx,mny:mxy,:]
-        crop_img_r = cv.resize(crop_img, (224,224))
-        img_list.append(crop_img_r)
+#         result = cv.bitwise_and(image, image, mask=thresh)
+#         result[thresh==0] = [255,255,255] 
+#         (x, y, z_) = np.where(result > 0)
+#         mnx = (np.min(x))
+#         mxx = (np.max(x))
+#         mny = (np.min(y))
+#         mxy = (np.max(y))
+#         crop_img = image[mnx:mxx,mny:mxy,:]
+#         crop_img_r = cv.resize(crop_img, (224,224))
+#         img_list.append(crop_img_r)

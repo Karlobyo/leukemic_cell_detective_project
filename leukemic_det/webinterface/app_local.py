@@ -4,24 +4,22 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 import base64
-from leukemic_det.ml_logic.data import load_test_img_prelim
+#from leukemic_det.ml_logic.data import load_test_img_prelim
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
+from tensorflow import keras
 from params import *
 
-# Set path to your service account credentials file
-credentials_path = '/Users/carlobarbini/Documents/Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
 
 # Create a client object using the credentials file
-client = storage.Client.from_service_account_json(credentials_path)
+client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
 
 app = FastAPI()
-#app.state.model = tensorflow.keras.models.load_model(
-    #"/Users/carlobarbini/code/Karlobyo/leukemic_cell_detective_project/leukemic_det/api/model/cnn_base_simple")
-
+app.state.model = tensorflow.keras.models.load_model(
+            '/Users/carlobarbini/code/Karlobyo/leukemic_cell_detective_project/leukemic_det/webinterface/cnn_base_simple')
 
 if 'button_clicked' not in st.session_state:
     st.session_state.button_clicked = False
@@ -82,6 +80,33 @@ image_numbers = [int for int in range(1,1801)]
 selected_image_number = st.multiselect('Please select an image (1800 samples available):', image_numbers)
 
 
+
+def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
+    
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+    
+    
+        
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    
+    
+
+    s = np.resize((test_img), (450, 450, 3))
+    resized_test_img = np.array(s)
+
+    return resized_test_img
+
+
+
+
+
 @app.get("/show_img")
 def show_img_prelim(img_sample : int):
 
@@ -112,9 +137,8 @@ for i in selected_image_number:
         """
         
         X_pred = load_test_img_prelim(img_sample)
-            
-        model = app.state.model
         
+        model = app.state.model
         assert model is not None
         
         X_pred = np.expand_dims(X_pred, 0)   
