@@ -4,4 +4,3 @@ numpy
 tensorflow
 fastapi
 google-cloud-storage
-base64

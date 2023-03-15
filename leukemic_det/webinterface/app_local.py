@@ -2,13 +2,11 @@
 import cv2 as cv
 import streamlit as st
 import numpy as np
-from PIL import Image
 import base64
 #from leukemic_det.ml_logic.data import load_test_img_prelim
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-from tensorflow import keras
 from params import *
 
 
