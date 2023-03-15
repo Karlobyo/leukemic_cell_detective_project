@@ -11,7 +11,8 @@ from google.cloud import storage
 from params import *
 
 # Set path to your service account credentials file
-credentials_path = '/Users/carlobarbini/Documents//Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
+#credentials_path = '/Users/carlobarbini/Documents//Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
+credentials_path='/Users/carlobarbini/leukemic_cell_detective_project/leukemic_det/carolingio/le-wagon-1-369318-fb5bec66ff4e.json'
 client = storage.Client.from_service_account_json(credentials_path)
 bucket = client.bucket(BUCKET_NAME)
 
@@ -76,6 +77,7 @@ def load_and_preprocess_train_data():
     # shuffle the data
     
     return X, y
+
 
 
 

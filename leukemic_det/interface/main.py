@@ -78,7 +78,7 @@ def train() -> float:
                                  validation_data=(X_val, y_val), epochs=25, verbose=0)
 
     
-    val_accuracy = np.min(history.history['val_accuracy'])
+    val_accuracy = np.max(history.history['val_accuracy'])
 
     params = dict(
         context="train",

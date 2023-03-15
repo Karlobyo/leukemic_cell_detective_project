@@ -21,7 +21,7 @@ EVALUATION_START_DATE = os.environ.get("EVALUATION_START_DATE")
 GCR_IMAGE = os.environ.get("GCR_IMAGE")
 GCR_REGION = os.environ.get("GCR_REGION")
 GCR_MEMORY = os.environ.get("GCR_MEMORY")
-GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+#GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
 
 
 LOCAL_DATA_PATH = os.path.join(os.path.expanduser('~'), ".lewagon", "mlops", "data")

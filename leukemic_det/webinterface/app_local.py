@@ -8,14 +8,14 @@ from leukemic_det.ml_logic.data import load_test_img_prelim
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-
+from params import *
 
 # Set path to your service account credentials file
 credentials_path = '/Users/carlobarbini/Documents/Carolingio_LeWagon/service_account_key/le-wagon-1-369318-fb5bec66ff4e.json'
 
 # Create a client object using the credentials file
 client = storage.Client.from_service_account_json(credentials_path)
-bucket = client.bucket('leukemic-1')
+bucket = client.bucket(BUCKET_NAME)
 
 
 app = FastAPI()
@@ -79,7 +79,7 @@ def callback():
 
 image_numbers = [int for int in range(1,1801)]
 # create a multi-select widget for selecting image numbers
-selected_image_number = st.multiselect('Please select an image (1801 samples available):', image_numbers)
+selected_image_number = st.multiselect('Please select an image (1800 samples available):', image_numbers)
 
 
 @app.get("/show_img")
