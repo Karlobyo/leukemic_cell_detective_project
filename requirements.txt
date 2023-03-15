@@ -19,8 +19,6 @@ google-cloud-storage
 db-dtypes
 pyarrow
 streamlit
-# prevent bq 3+ db-dtypes package error when running training from bq
-
 mlflow==2.1.1
 
 python-dotenv
