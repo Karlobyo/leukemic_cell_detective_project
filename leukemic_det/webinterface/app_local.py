@@ -4,10 +4,7 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 import base64
-from leukemic_det.ml_logic.data import load_test_img
 from leukemic_det.ml_logic.data import load_test_img_prelim
-from leukemic_det.ml_logic.data import load_test_data
-from leukemic_det.ml_logic.registry import load_model
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow

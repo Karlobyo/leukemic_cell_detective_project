@@ -6,7 +6,6 @@ leukemic_cell_detective.egg-info/dependency_links.txt
 leukemic_cell_detective.egg-info/requires.txt
 leukemic_cell_detective.egg-info/top_level.txt
 leukemic_det/__init__.py
-leukemic_det/lib.py
 leukemic_det/api/__init__.py
 leukemic_det/api/fast.py
 leukemic_det/interface/__init__.py
@@ -15,5 +14,6 @@ leukemic_det/ml_logic/VGG16_model.py
 leukemic_det/ml_logic/__init__.py
 leukemic_det/ml_logic/data.py
 leukemic_det/ml_logic/model.py
+leukemic_det/ml_logic/params.py
 leukemic_det/ml_logic/preprocessor.py
 leukemic_det/ml_logic/registry.py
