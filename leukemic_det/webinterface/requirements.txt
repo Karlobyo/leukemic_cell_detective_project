@@ -1,7 +1,6 @@
 opencv-python-headless
 streamlit
 numpy
-tensorflow==2.11
-protobuf==3.9.2
+tensorflow
 fastapi
 google-cloud-storage
