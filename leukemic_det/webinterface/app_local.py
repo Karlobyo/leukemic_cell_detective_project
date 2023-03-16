@@ -9,7 +9,6 @@ from google.cloud import storage
 import tensorflow
 from params import *
 
-
 # Create a client object using the credentials file
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
@@ -67,17 +66,6 @@ st.markdown('Dataset publication: Gupta, A., & Gupta, R. (2019). ALL Challenge d
 
 st.markdown('This is a convolution neural network deep learning app meant to deliver real-time predictions classifiying human white blood cells microscopic images as healthy or malignant (acute lymphoblastic leukaemia)')
 
-if 'button_clicked' not in st.session_state:
-    st.session_state.button_clicked = False
-def callback():
-    st.session_state.button_clicked = True
-
-
-image_numbers = [int for int in range(1,1801)]
-# create a multi-select widget for selecting image numbers
-selected_image_number = st.multiselect('Please select an image (1800 samples available):', image_numbers)
-
-
 
 def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
     
@@ -103,10 +91,8 @@ def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS 
 
 
 
-
-
 @app.get("/show_img")
-def show_img_prelim(img_sample : int):
+def show_img_prelim(batch : int):
 
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
     test_image_paths = []
@@ -114,44 +100,76 @@ def show_img_prelim(img_sample : int):
         image_path = blob.name
         test_image_paths.append(image_path)
     
+    test_imgs =[]
     
-        
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    for i in range((batch-1)*BATCH_SIZE, BATCH_SIZE*batch):
     
-    return test_img
+        blob = bucket.blob(test_image_paths[i])
+        image_bytes = blob.download_as_bytes()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+        test_imgs.append(test_img)
+    
+    return test_imgs
 
-for i in selected_image_number:
-    st.image(show_img_prelim(i), width=200, caption=f'Human white blood cell #{i}')
+
+@app.get("/predict")
+def predict(img_sample : int):
+    """
+    Make a single image prediction
+    Assumes `img_sample' is provided as an integer index by the user
+    """
+    
+    X_pred = load_test_img_prelim(img_sample)
+    
+    model = app.state.model
+    assert model is not None
+    
+    X_pred = np.expand_dims(X_pred, 0)   
+    y_pred = model.predict(np.array(X_pred))
+    
+    y_pred = (y_pred > 0.5).astype(int)
+    
+    return y_pred
 
 
-    @app.get("/predict")
-    def predict(img_sample : int):
-        """
-        Make a single image prediction
-        Assumes `img_sample' is provided as an integer index by the user
-        """
+
+BATCH_SIZE=5
+
+n_batches = int(round(1800 / BATCH_SIZE))
+batches = list(range(n_batches))
+selected_batch_number = st.multiselect(f'Please select an image batch ({n_batches} available):', batches)
+
+if selected_batch_number:
+    i = selected_batch_number[-1]
+    img_list = show_img_prelim(i)
+    captions = []
+    for idx, img in enumerate(img_list):
+        idx = idx + 1
+        captions.append(f'Human white blood cell #{idx}')
+    st.image(img_list, width=200, caption=captions)
+
+    img_number = [k for k in list(range(1, BATCH_SIZE+1))]
+    selected_img_number = st.multiselect('Please select an image to be classified from the selected batch:', img_number)
+
+    if selected_img_number:
+        j = selected_img_number[-1]
+        j=j-1
+        st.image(show_img_prelim(i)[j], width=200, caption=f'Human white blood cell #{j}')
+
         
-        X_pred = load_test_img_prelim(img_sample)
+        if (st.button('Classify',on_click=callback) or st.session_state.button_clicked):
+         
+            predicted_class = predict(selected_img_number[0]+((i-1)*BATCH_SIZE))
         
-        model = app.state.model
-        assert model is not None
-        
-        X_pred = np.expand_dims(X_pred, 0)   
-        y_pred = model.predict(np.array(X_pred))
-        
-        y_pred = (y_pred > 0.5).astype(int)
-        
-        return y_pred
+            if predicted_class == 0:
+                st.write('Healthy')
+            else:
+                st.write('Malignant')
     
     
+    # im_number = [k for k in list(range(1, 1801))]
+    # selected_im_number = st.multiselect('Please select an image from the selected batch:', im_number)
     
-    predicted_class = predict(i)
-    if predicted_class == 0:
-        st.write('healthy')
-    else:
-        st.write('malignant')
-    
-    
+    # for i in selected_im_number:
+    #     show_img_prelim
