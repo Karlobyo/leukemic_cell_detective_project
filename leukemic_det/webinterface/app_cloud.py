@@ -14,10 +14,9 @@ import tensorflow
 client = storage.Client()
 bucket = client.bucket('leukemic-1')
 
-
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
-            '/Users/carlobarbini/code/Karlobyo/leukemic_cell_detective_project/leukemic_det/webinterface/cnn_base_simple')
+            'leukemic_det/webinterface/cnn_base_simple')
 
 if 'button_clicked' not in st.session_state:
     st.session_state.button_clicked = False
