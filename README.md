@@ -9,3 +9,11 @@ Gupta, A., & Gupta, R. (2019). ALL Challenge dataset of ISBI 2019 [Data set]. Th
 
 This is a convolution neural network deep learning app meant to deliver real-time predictions classifiying human white blood cells microscopic images as healthy or malignant (acute lymphoblastic leukaemia).
 
+
+Public link:
+https://karlobyo-leukemic-cell-leukemic-detwebinterfaceapp-cloud-3tpp43.streamlit.app/
+
+Would you like to try and run the app locally from your machine? clone the repo from your terminal > 
+git clone https://github.com/Karlobyo/leukemic_cell_detective_project.git
+
+once you are in the webinterface directory run streamlit run app_local.py > there it goes!
