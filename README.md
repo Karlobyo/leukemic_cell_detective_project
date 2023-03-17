@@ -11,7 +11,7 @@ This is a convolution neural network deep learning app meant to deliver real-tim
 
 
 Public link:
-https://karlobyo-leukemic--leukemic-detwebinterfaceapp-cloud-hu13vk.streamlit.app/
+https://karlobyo-leukemic-cell-leukemic-detwebinterfaceapp-cloud-3tpp43.streamlit.app/
 
 Would you like to try and run the app locally from your machine? Clone the repo from your terminal > 
 git clone https://github.com/Karlobyo/leukemic_cell_detective_project.git
