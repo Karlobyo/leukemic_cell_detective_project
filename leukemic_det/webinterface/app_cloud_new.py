@@ -6,11 +6,10 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-from params import *
 
 # Create a client object using the credentials file
 client = storage.Client()
-bucket = client.bucket(BUCKET_NAME)
+bucket = client.bucket('leukemic-1')
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
