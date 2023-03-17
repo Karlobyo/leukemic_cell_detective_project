@@ -207,4 +207,4 @@ st.markdown('')
 
 st.markdown('')
     
-st.markdown('-In the best case your image should show an individual cell well defined from a black background-')
+st.markdown('-The model works best if your image shows an individual cell well defined from a black background-')
