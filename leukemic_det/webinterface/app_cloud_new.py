@@ -13,7 +13,7 @@ bucket = client.bucket('leukemic-1')
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
-            '/Users/carlobarbini/code/Karlobyo/leukemic_cell_detective_project/leukemic_det/webinterface/cnn_base_simple')
+            'leukemic_det/webinterface/cnn_base_simple')
 model = app.state.model
 
 # if 'button_clicked' not in st.session_state:
