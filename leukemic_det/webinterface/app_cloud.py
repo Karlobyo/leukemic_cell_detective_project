@@ -147,7 +147,7 @@ def predict(img_sample : int):
 st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
-selected_img_number = st.multiselect('', img_number)
+selected_img_number = st.multiselect('', img_number, max_selections=1)
 
 if selected_img_number:
     j = selected_img_number[-1]
