@@ -9,13 +9,6 @@ def preprocess_data_VGG16(X):
     return X_prep
 
 
-#def preprocess_data_base(X):
-    
-
-
-
-
-
 def preprocess_data_base_crop(X):
     
     image = cv.imread(X)

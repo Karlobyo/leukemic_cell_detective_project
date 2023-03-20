@@ -3,7 +3,6 @@ import pandas as pd
 from google.cloud import bigquery
 from pathlib import Path
 from colorama import Fore, Style
-from dateutil.parser import parse
 from params import *
 from leukemic_det.ml_logic.data import load_and_preprocess_train_data
 from leukemic_det.ml_logic.registry import mlflow_run
@@ -20,10 +19,6 @@ def preprocess() -> None:
     """
 
     print(Fore.MAGENTA + "\n⭐️ Use case: preprocess" + Style.RESET_ALL)
-
-    #from taxifare.ml_logic.data import clean_data
-    from leukemic_det.ml_logic.preprocessor import preprocess_data_VGG16
-    from leukemic_det.ml_logic.registry import save_model, save_results
     
     X, y = tqdm(load_and_preprocess_train_data())
     
@@ -42,7 +37,6 @@ def preprocess() -> None:
 
 
 
-
 #@mlflow_run
 def train() -> float:
     """
@@ -58,7 +52,7 @@ def train() -> float:
     from leukemic_det.ml_logic.model import load_base_model
     #from leukemic_det.ml_logic.registry import mlflow_transition_model
 
-    print(Fore.BLUE + "\nLoading preprocessed validation data..." + Style.RESET_ALL)
+    print(Fore.BLUE + "\nLoading preprocessed data..." + Style.RESET_ALL)
 
     
     X_train, X_val, y_train, y_val = preprocess()
