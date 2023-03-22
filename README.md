@@ -1,4 +1,4 @@
-# leukemic_cell_detective
+# Leukemic Cell Detective
 classifier of healthy vs malignant human white blood cells
 
 Original dataset
