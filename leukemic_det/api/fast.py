@@ -2,8 +2,7 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
-from leukemic_det.ml_logic.data import load_test_img
-from leukemic_det.ml_logic.registry import load_model
+from leukemic_det.ml_logic.data import load_test_img_prelim
 import tensorflow
 import matplotlib.pyplot as plt
 import cv2 as cv
@@ -21,13 +20,11 @@ def show_img(img_sample : int):
     Assumes `img_sample' is provided as an integer index by the user
     """
     
-    img = load_test_img(img_sample)
+    img = load_test_img_prelim(img_sample)
     
     img = cv.imdecode(img, cv.IMREAD_COLOR)
         
     return img
-
-
 
 
 @app.get("/predict")
@@ -37,7 +34,7 @@ def predict(img_sample : int):
     Assumes `img_sample' is provided as an integer index by the user
     """
     
-    X_pred = load_test_img(img_sample)
+    X_pred = load_test_img_prelim(img_sample)
         
     model = app.state.model
     
@@ -54,4 +51,4 @@ def predict(img_sample : int):
 
 @app.get("/")
 def root():
-    return {'greeting':'gianni'}
+    return {'greeting':'hello'}

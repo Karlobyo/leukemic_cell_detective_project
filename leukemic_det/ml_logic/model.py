@@ -1,10 +1,7 @@
 
-from tensorflow import keras
 from keras import layers, models
-from keras import optimizers
-from keras.callbacks import EarlyStopping
 import numpy as np
-
+from colorama import Fore, Style
 
 def load_base_model():
 
@@ -33,8 +30,7 @@ def load_base_model():
 
 def evaluate_model(model: models,
                    X: np.ndarray,
-                   y: np.ndarray,
-                   batch_size=64):
+                   y: np.ndarray):
     """
     Evaluate trained model performance on dataset
     """
@@ -48,9 +44,7 @@ def evaluate_model(model: models,
     metrics = model.evaluate(
         x=X,
         y=y,
-        batch_size=batch_size,
         verbose=0,
-        # callbacks=None,
         return_dict=True)
 
     loss = metrics["loss"]
