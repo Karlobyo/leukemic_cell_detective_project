@@ -1,4 +1,3 @@
-from tensorflow import keras
 from keras.applications.vgg16 import preprocess_input
 import cv2 as cv
 
