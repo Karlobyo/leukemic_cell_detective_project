@@ -16,11 +16,6 @@ app.state.model = tensorflow.keras.models.load_model(
             'leukemic_det/webinterface/cnn_base_simple')
 model = app.state.model
 
-# if 'button_clicked' not in st.session_state:
-#     st.session_state.button_clicked = False
-# def callback():
-#     st.session_state.button_clicked = True
-
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -153,12 +148,9 @@ if selected_img_number:
     j = selected_img_number[-1]
     j=j-1
     im = show_img_prelim(j)
-    # im = np.resize(im, (100, 100, 3))
     st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
 
-    
-    #if (st.button('Classify',on_click=callback) or st.session_state.button_clicked):
-        
+            
     predicted_class = predict(selected_img_number[-1])
 
     if predicted_class == 0:
@@ -187,8 +179,6 @@ if uploaded_file is not None:
     
     # predict
     
-    #if (st.button('Classify uploaded image',on_click=callback, key='upload') or st.session_state.button_clicked):
-
     u = np.resize((image_u), (450, 450, 3))
     resized_u = np.array(u)
     

@@ -20,28 +20,6 @@ app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
             '/Users/carlobarbini/code/Karlobyo/leukemic_cell_detective_project/leukemic_det/webinterface/cnn_base_simple')
 
-# if 'button_clicked' not in st.session_state:
-#     st.session_state.button_clicked = False
-# def callback():
-#     st.session_state.button_clicked = True
-
-
-# def add_bg_from_local(image_file):
-#     with open(image_file, "rb") as image_file:
-#         encoded_string = base64.b64encode(image_file.read())
-#     st.markdown(
-#     f"""
-#     <style>
-#     .stApp {{
-#         background-image: url(data:image/{"jpg"};base64,{encoded_string.decode()});
-#         background-size: cover
-#     }}
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-#     )
-
-
 
 st.set_page_config(layout='wide')
 
@@ -67,11 +45,6 @@ st.markdown('')
 st.markdown('***')
 
 st.markdown('')
-# st.markdown(
-#     '<hr style="border-top: 3px solid #bbb;">',
-#     unsafe_allow_html=True
-# )
-
 
 st.markdown('Original dataset: https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=52758223')
 
@@ -87,10 +60,6 @@ st.markdown('***')
 
 st.markdown('')
 
-# st.markdown(
-#     '<hr style="border-top: 3px solid #bbb;">',
-#     unsafe_allow_html=True
-# )
 
 def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
     
@@ -165,9 +134,7 @@ selected_batch_number = st.multiselect(f'Please select an image batch ({n_batche
 if selected_batch_number:
     i = selected_batch_number[-1]
     img_list = show_img_prelim(i)
-    # for g in show_img_prelim(i):
-    #     img_r = np.resize(g, (450, 450, 3))
-    #     img_list.append(img_r)
+
     captions = []
     for idx, img in enumerate(img_list):
         idx = idx + 1
@@ -181,11 +148,7 @@ if selected_batch_number:
         j = selected_img_number[-1]
         j=j-1
         im = show_img_prelim(i)[j]
-        # im = np.resize(im, (100, 100, 3))
         st.image(im, width=200, caption=f'Human white blood cell #{j}')
-
-        
-        #if (st.button('Classify',on_click=callback) or st.session_state.button_clicked):
          
         predicted_class = predict(selected_img_number[0]+((i-1)*BATCH_SIZE))
     
@@ -194,9 +157,3 @@ if selected_batch_number:
         else:
             st.write('Malignant')
     
-    
-    # im_number = [k for k in list(range(1, 1801))]
-    # selected_im_number = st.multiselect('Please select an image from the selected batch:', im_number)
-    
-    # for i in selected_im_number:
-    #     show_img_prelim
