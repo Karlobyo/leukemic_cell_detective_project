@@ -4,11 +4,8 @@ reinstall_package:
 	@pip uninstall -y leukemic_cell_detective || :
 	@pip install -e .
 
-run_preprocess:
-	python -c 'from leukemic_det.interface.main import preprocess; preprocess()'
-
-run_train:
-	python -c 'from leukemic_det.interface.main import train; train()'
+run_preprocess_and_train:
+	python -c 'from leukemic_det.interface.main import preprocess_and_train; preprocess_and_train()'
 
 run_pred:
 	python -c 'from leukemic_det.interface.main import pred; pred()'
@@ -39,9 +36,6 @@ all: install clean
 
 reset_local_files:
 	rm -rf ${ML_DIR}
-	mkdir -p ~/.leukemic/mlops/data/
-	mkdir ~/.leukemic/mlops/data/raw
-	mkdir ~/.leukemic/mlops/data/processed
 	mkdir ~/.leukemic/mlops/training_outputs
 	mkdir ~/.leukemic/mlops/training_outputs/metrics
 	mkdir ~/.leukemic/mlops/training_outputs/models

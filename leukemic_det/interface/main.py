@@ -27,7 +27,7 @@ def preprocess_and_train() -> float:
     print(Fore.BLUE + "\nLoading preprocessed data..." + Style.RESET_ALL)
     
     
-    X, y = tqdm(load_and_preprocess_train_data(DATA_SIZE=DATA_SIZE))
+    X, y = tqdm(load_and_preprocess_train_data(DATA_SIZE))
     
     split_ratio = 0.2 
     
