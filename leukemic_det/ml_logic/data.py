@@ -63,6 +63,7 @@ def load_and_preprocess_train_data(DATA_SIZE : int):
     
     X = np.array(img_list)
     y = np.array(data['labels'])
+    y = y[:DATA_SIZE]
     
     return X, y
 

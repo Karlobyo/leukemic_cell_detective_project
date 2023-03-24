@@ -19,12 +19,12 @@ def preprocess_and_train() -> float:
     Return val_accuracy as float
     """
 
-    print(Fore.MAGENTA + "\n⭐️ Use case: train" + Style.RESET_ALL)
+    print(Fore.MAGENTA + "\n⭐️ Use case: preprocess and train" + Style.RESET_ALL)
     from leukemic_det.ml_logic.registry import save_model
     from leukemic_det.ml_logic.model import load_base_model
     from leukemic_det.ml_logic.registry import mlflow_transition_model
 
-    print(Fore.BLUE + "\nLoading preprocessed data..." + Style.RESET_ALL)
+    print(Fore.BLUE + "\nLoading and preprocessing data..." + Style.RESET_ALL)
     
     
     X, y = tqdm(load_and_preprocess_train_data(DATA_SIZE))
@@ -38,16 +38,27 @@ def preprocess_and_train() -> float:
     y_train = y[0:train_length]
     y_val = y[train_length:]
     
+    X_s = X_train.shape
+    y_s = y_train.shape
     
-    # Train model using `model.py`
-    model = load_base_model()
+    print(Fore.CYAN + f"X_train shape is {X_s}" + Style.RESET_ALL)
+    print(Fore.CYAN + f"y_train shape is {y_s}" + Style.RESET_ALL)
+
+    
+    # Train model 
+    if MODEL == "base":
+        model = load_base_model()
+    elif MODEL == "vgg":
+        model = 
         
     es = EarlyStopping(patience=10)
+    
+    print(Fore.BLUE + "\nTraining the model..." + Style.RESET_ALL)
     
     history = model.fit(X_train, y_train,
                                  batch_size=64,
                                  callbacks=[es],
-                                 validation_data=(X_val, y_val), epochs=25, verbose=0)
+                                 validation_data=(X_val, y_val), epochs=25, verbose=1)
 
     
     val_accuracy = np.max(history.history['val_accuracy'])
@@ -61,6 +72,7 @@ def preprocess_and_train() -> float:
         mlflow_transition_model(current_stage="None", new_stage="Staging")
 
     print("✅ preprocess_and_train() done \n")
+    print(f"The model has a val accuracy of {val_accuracy}")
     return val_accuracy
     
 
