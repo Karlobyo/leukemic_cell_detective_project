@@ -1,12 +1,7 @@
 
 import numpy as np 
 import pandas as pd 
-import os
 import cv2 as cv
-import matplotlib.pyplot as plt
-from PIL import Image
-import io
-from tensorflow import keras
 from google.cloud import storage
 from params import *
 
@@ -14,7 +9,6 @@ from params import *
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-# print(credentials_path)
 
 def get_path_image(folder):
     image_paths = []
@@ -74,11 +68,26 @@ def load_and_preprocess_train_data():
     
     return X, y
 
+def show_img_prelim(img_sample : int):
 
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+    
+    test_imgs =[]
+    
+    
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    test_imgs.append(test_img)
+    
+    return test_imgs
 
-
-
-def load_test_img_prelim(img_sample: int): # returns test images from GCS bucket leukemic-1
+def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
     
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
     test_image_paths = []
@@ -99,7 +108,3 @@ def load_test_img_prelim(img_sample: int): # returns test images from GCS bucket
     resized_test_img = np.array(s)
 
     return resized_test_img
-
-
-    
-    
