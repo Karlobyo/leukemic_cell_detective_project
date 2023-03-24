@@ -78,7 +78,6 @@ def show_img_prelim(img_sample : int):
     
     test_imgs =[]
     
-    
     blob = bucket.blob(test_image_paths[img_sample])
     image_bytes = blob.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
