@@ -94,6 +94,28 @@ def show_img_prelim(img_sample : int):
     
     return test_imgs
 
+def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
+    
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+    
+    
+        
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    
+    
+
+    s = np.resize((test_img), (450, 450, 3))
+    resized_test_img = np.array(s)
+
+    return resized_test_img
+
 def predict(img_sample : int):
     """
     Make a single image prediction
