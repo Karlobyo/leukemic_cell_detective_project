@@ -18,7 +18,7 @@ def load_base_model():
 
     model.add(layers.Flatten())
 
-    model.add(layers.Dense(50))
+    model.add(layers.Dense(10))
 
     model.add(layers.Dense(1, activation='sigmoid'))
 
