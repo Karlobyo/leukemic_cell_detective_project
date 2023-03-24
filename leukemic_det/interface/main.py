@@ -9,16 +9,25 @@ from keras.callbacks import EarlyStopping
 from tqdm import tqdm
 
 
-def preprocess() -> None:
+#@mlflow_run
+def preprocess_and_train() -> float:
     """
-    - Query the image dataset from leukemic-1 bucket dataset
-    - Cache query result as local files if not exist locally
-    - Clean and preprocess data
+    - Fetch data from GCS and preprocess
+    - Train on the preprocessed data 
+    - Store model weights
+
+    Return val_accuracy as float
     """
 
-    print(Fore.MAGENTA + "\n⭐️ Use case: preprocess" + Style.RESET_ALL)
+    print(Fore.MAGENTA + "\n⭐️ Use case: train" + Style.RESET_ALL)
+    from leukemic_det.ml_logic.registry import save_model
+    from leukemic_det.ml_logic.model import load_base_model
+    from leukemic_det.ml_logic.registry import mlflow_transition_model
+
+    print(Fore.BLUE + "\nLoading preprocessed data..." + Style.RESET_ALL)
     
-    X, y = tqdm(load_and_preprocess_train_data())
+    
+    X, y = tqdm(load_and_preprocess_train_data(DATA_SIZE=DATA_SIZE))
     
     split_ratio = 0.2 
     
@@ -28,59 +37,21 @@ def preprocess() -> None:
     X_val = X[train_length:]
     y_train = y[0:train_length]
     y_val = y[train_length:]
-
-    print("✅ preprocess() done \n")
-
-    return X_train, X_val, y_train, y_val
-
-
-
-#@mlflow_run
-def train() -> float:
-    """
-    - Download processed data from your BQ processed table (or from cache if exists)
-    - Train on the preprocessed dataset 
-    - Store training results and model weights
-
-    Return val_accuracy as float
-    """
-
-    print(Fore.MAGENTA + "\n⭐️ Use case: train" + Style.RESET_ALL)
-    from leukemic_det.ml_logic.registry import save_results
-    from leukemic_det.ml_logic.registry import save_model
-    from leukemic_det.ml_logic.model import load_base_model
-    from leukemic_det.ml_logic.registry import mlflow_transition_model
-
-    print(Fore.BLUE + "\nLoading preprocessed data..." + Style.RESET_ALL)
-
-    
-    X_train, X_val, y_train, y_val = preprocess()
     
     
     # Train model using `model.py`
     model = load_base_model()
-    #if model is None:
-    #   model = initialize_model(input_shape=X_train_processed.shape[1:])
-    
         
-    es = EarlyStopping(patience=20)
+    es = EarlyStopping(patience=10)
     
     history = model.fit(X_train, y_train,
-                                 batch_size=4,
+                                 batch_size=64,
                                  callbacks=[es],
                                  validation_data=(X_val, y_val), epochs=25, verbose=0)
 
     
     val_accuracy = np.max(history.history['val_accuracy'])
 
-    params = dict(
-        context="train",
-        training_set_size=DATA_SIZE,
-        row_count=len(X_train),
-    )
-
-    # Save results on hard drive using taxifare.ml_logic.registry
-    save_results(params=params, metrics=dict(val_accuracy=val_accuracy))
 
     # Save model weight on hard drive (and optionally on GCS too!)
     save_model(model=model)
@@ -89,7 +60,7 @@ def train() -> float:
     if MODEL_TARGET == 'mlflow':
         mlflow_transition_model(current_stage="None", new_stage="Staging")
 
-    print("✅ train() done \n")
+    print("✅ preprocess_and_train() done \n")
     return val_accuracy
     
 

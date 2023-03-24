@@ -18,7 +18,7 @@ def get_path_image(folder):
     return image_paths
 
 
-def load_and_preprocess_train_data():
+def load_and_preprocess_train_data(DATA_SIZE : int):
     
     # returns imaging data as X and labels as y both as numpy arrays
     
@@ -52,7 +52,7 @@ def load_and_preprocess_train_data():
         
     img_list = []
     
-    for i in range(len(data)):
+    for i in range(DATA_SIZE):
         
         blob = bucket.blob(data['img_data'][i])
         image_bytes = blob.download_as_bytes()
@@ -61,10 +61,8 @@ def load_and_preprocess_train_data():
         img_list.append(image)   
     
     
-    
     X = np.array(img_list)
     y = np.array(data['labels'])
-    
     
     return X, y
 
