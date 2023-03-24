@@ -58,7 +58,7 @@ def evaluate_model(model: models,
                    X: np.ndarray,
                    y: np.ndarray):
     """
-    Evaluate trained model performance on dataset
+    Evaluate trained model performance on test data
     """
 
     print(Fore.BLUE + f"\nEvaluate model on {len(X)} rows..." + Style.RESET_ALL)

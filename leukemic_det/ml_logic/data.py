@@ -98,7 +98,7 @@ def load_test_imgs(): # returns test images from GCS bucket leukemic-1
     
     test_img_list = []
 
-    for i in tqdm(range(len(test_image_paths))):
+    for i in tqdm(range(len(test_image_paths[:TEST_DATA_SIZE]))):
         blob = bucket.blob(test_image_paths[i])
         image_bytes = blob.download_as_bytes()
         nparr = np.frombuffer(image_bytes, np.uint8)
@@ -114,6 +114,7 @@ def load_test_imgs(): # returns test images from GCS bucket leukemic-1
 
     test_img_labels = pd.read_csv('notebooks/test_labels')
     y_test = np.array(test_img_labels['labels'])
+    y_test = y_test[:TEST_DATA_SIZE]
 
     return X_test, y_test
 

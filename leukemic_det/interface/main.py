@@ -11,7 +11,7 @@ from keras.callbacks import EarlyStopping
 from tqdm import tqdm
 
 
-#@mlflow_run
+@mlflow_run
 def preprocess_and_train() -> float:
     """
     - Fetch data from GCS and preprocess
@@ -23,6 +23,7 @@ def preprocess_and_train() -> float:
 
     print(Fore.MAGENTA + "\n⭐️ Use case: preprocess and train" + Style.RESET_ALL)
     from leukemic_det.ml_logic.registry import save_model
+    from leukemic_det.ml_logic.registry import save_results
     from leukemic_det.ml_logic.model import load_base_model
     from leukemic_det.ml_logic.model import load_VGG16_model
     from leukemic_det.ml_logic.registry import mlflow_transition_model
@@ -54,7 +55,7 @@ def preprocess_and_train() -> float:
     elif MODEL == "vgg":
         model = load_VGG16_model()
         
-    es = EarlyStopping(patience=10)
+    es = EarlyStopping(patience=5)
     
     print(Fore.BLUE + "\nTraining the model..." + Style.RESET_ALL)
     
@@ -64,10 +65,16 @@ def preprocess_and_train() -> float:
                                  validation_data=(X_val, y_val), epochs=25, verbose=1)
 
     
-    val_accuracy = np.max(history.history['val_accuracy'])
+    val_accuracy = history.history['val_accuracy'][-1]
 
+    params = dict(
+        context="train",
+        training_set_size=DATA_SIZE,
+        row_count=len(X_train),
+    )
 
     # Save model weight on hard drive (and optionally on GCS too!)
+    save_results(params=params, metrics=dict(val_accuracy=val_accuracy))
     save_model(model=model)
 
     # The latest model should be moved to staging
@@ -79,7 +86,7 @@ def preprocess_and_train() -> float:
     return val_accuracy
     
 
-#@mlflow_run
+@mlflow_run
 def evaluate(stage: str = "Production") -> float:
     """
     Evaluate the performance of the latest production model on processed data
@@ -95,7 +102,7 @@ def evaluate(stage: str = "Production") -> float:
     X, y = load_test_imgs()
 
     metrics_dict = evaluate_model(model=model, X=X, y=y)
-    accuracy = metrics_dict["accuracy"]
+    accuracy = metrics_dict[1]
 
     params = dict(
         context="evaluate", # Package behavior
@@ -106,6 +113,7 @@ def evaluate(stage: str = "Production") -> float:
     save_results(params=params, metrics=metrics_dict)
 
     print("✅ evaluate() done \n")
+    print(f"The model has an accuracy of {accuracy} on the test data")
     return accuracy
 
 

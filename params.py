@@ -6,6 +6,7 @@ from google.cloud import storage
 ##################  VARIABLES  ##################
 BATCH_SIZE=os.environ.get("BATCH_SIZE")
 DATA_SIZE = int(os.environ.get("DATA_SIZE"))
+TEST_DATA_SIZE = int(os.environ.get("TEST_DATA_SIZE"))
 CHUNK_SIZE = os.environ.get("CHUNK_SIZE")
 MODEL_TARGET = os.environ.get("MODEL_TARGET")
 MODEL=os.environ.get("MODEL")
