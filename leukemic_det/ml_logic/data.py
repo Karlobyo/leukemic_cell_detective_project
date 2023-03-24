@@ -4,6 +4,7 @@ import pandas as pd
 import cv2 as cv
 from google.cloud import storage
 from params import *
+from tqdm import tqdm
 
 # Set path to your service account credentials file
 client = storage.Client()
@@ -84,6 +85,38 @@ def show_img_prelim(img_sample : int):
     test_imgs.append(test_img)
     
     return test_imgs
+
+
+def load_test_imgs(): # returns test images from GCS bucket leukemic-1
+    
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+    
+    
+    test_img_list = []
+
+    for i in tqdm(range(len(test_image_paths))):
+        blob = bucket.blob(test_image_paths[i])
+        image_bytes = blob.download_as_bytes()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+        test_img_list.append(test_img)
+    
+    
+    X_test= []
+    for i in test_img_list:
+        s = np.resize((i), (450, 450, 3))
+        X_test.append(s)
+    X_test = np.array(X_test)
+
+    test_img_labels = pd.read_csv('notebooks/test_labels')
+    y_test = np.array(test_img_labels['labels'])
+
+    return X_test, y_test
+
 
 def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
     

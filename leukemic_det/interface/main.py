@@ -4,6 +4,8 @@ from pathlib import Path
 from colorama import Fore, Style
 from params import *
 from leukemic_det.ml_logic.data import load_and_preprocess_train_data
+from leukemic_det.ml_logic.data import load_test_imgs
+from leukemic_det.ml_logic.data import load_test_img_prelim
 from leukemic_det.ml_logic.registry import mlflow_run
 from keras.callbacks import EarlyStopping
 from tqdm import tqdm
@@ -22,6 +24,7 @@ def preprocess_and_train() -> float:
     print(Fore.MAGENTA + "\n⭐️ Use case: preprocess and train" + Style.RESET_ALL)
     from leukemic_det.ml_logic.registry import save_model
     from leukemic_det.ml_logic.model import load_base_model
+    from leukemic_det.ml_logic.model import load_VGG16_model
     from leukemic_det.ml_logic.registry import mlflow_transition_model
 
     print(Fore.BLUE + "\nLoading and preprocessing data..." + Style.RESET_ALL)
@@ -49,7 +52,7 @@ def preprocess_and_train() -> float:
     if MODEL == "base":
         model = load_base_model()
     elif MODEL == "vgg":
-        model = 
+        model = load_VGG16_model()
         
     es = EarlyStopping(patience=10)
     
@@ -72,7 +75,7 @@ def preprocess_and_train() -> float:
         mlflow_transition_model(current_stage="None", new_stage="Staging")
 
     print("✅ preprocess_and_train() done \n")
-    print(f"The model has a val accuracy of {val_accuracy}")
+    print(f"The model has an accuracy of {val_accuracy}")
     return val_accuracy
     
 
@@ -89,7 +92,7 @@ def evaluate(stage: str = "Production") -> float:
     model = load_model(stage=stage)
     assert model is not None
 
-    X, y = preprocess()
+    X, y = load_test_imgs()
 
     metrics_dict = evaluate_model(model=model, X=X, y=y)
     accuracy = metrics_dict["accuracy"]
@@ -116,7 +119,7 @@ def pred(X_pred: np.ndarray = None) -> int:
     from leukemic_det.ml_logic.registry import load_model
     
     if X_pred is None:
-       X_pred = preprocess()
+       X_pred = load_test_img_prelim(np.random.randint(low=0, high=1000))
 
     model = load_model()
     assert model is not None
@@ -128,7 +131,6 @@ def pred(X_pred: np.ndarray = None) -> int:
 
 
 if __name__ == '__main__':
-    preprocess()
-    train()
+    preprocess_and_train()
     evaluate()
     pred()
