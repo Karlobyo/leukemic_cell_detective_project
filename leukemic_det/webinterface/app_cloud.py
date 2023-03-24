@@ -6,6 +6,7 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
+import io
 
 # Create a client object using the credentials file
 client = storage.Client()
