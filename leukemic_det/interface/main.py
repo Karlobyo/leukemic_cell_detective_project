@@ -113,7 +113,7 @@ def evaluate(stage: str = "Production") -> float:
     save_results(params=params, metrics=metrics_dict)
 
     print("✅ evaluate() done \n")
-    print(f"The model has an accuracy of {accuracy} on the test data")
+    
     return accuracy
 
 
