@@ -78,4 +78,4 @@ def evaluate_model(model: models,
 
     print(f"✅ model evaluated: accuracy {round(accuracy, 2)}")
 
-    return [loss, accuracy]
+    return metrics
