@@ -102,7 +102,7 @@ def evaluate(stage: str = "Production") -> float:
     X, y = load_test_imgs()
 
     metrics_dict = evaluate_model(model=model, X=X, y=y)
-    accuracy = metrics_dict[1]
+    accuracy = metrics_dict["accuracy"]
 
     params = dict(
         context="evaluate", # Package behavior
