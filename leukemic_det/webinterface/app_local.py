@@ -6,7 +6,7 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-from params import * 
+from leukemic_det.params import * 
 from leukemic_det.api.fast import predict
 
 # Create a client object using the credentials file

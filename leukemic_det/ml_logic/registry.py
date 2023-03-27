@@ -4,13 +4,13 @@ import time
 import pickle
 from colorama import Fore, Style
 from tensorflow import keras
-from params import *
+from leukemic_det.params import *
 import mlflow
 from mlflow.tracking import MlflowClient
 
 def save_results(params: dict, metrics: dict) -> None:
     """
-    Persist params & metrics locally on mlflow
+    Persist params & metrics on mlflow
     """
     if MODEL_TARGET == "mlflow":
         if params is not None:

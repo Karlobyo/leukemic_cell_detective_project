@@ -7,7 +7,7 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-from params import *
+from leukemic_det.params import *
 
 BATCH_SIZE = int(BATCH_SIZE)
 

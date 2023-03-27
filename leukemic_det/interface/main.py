@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from colorama import Fore, Style
-from params import *
+from leukemic_det.params import *
 from leukemic_det.ml_logic.data import load_and_preprocess_train_data
 from leukemic_det.ml_logic.data import load_test_imgs
 from leukemic_det.ml_logic.data import load_test_img_prelim

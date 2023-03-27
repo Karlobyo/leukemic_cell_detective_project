@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd 
 import cv2 as cv
 from google.cloud import storage
-from params import *
+from leukemic_det.params import *
 from tqdm import tqdm
 
 # Set path to your service account credentials file
