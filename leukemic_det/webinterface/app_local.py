@@ -6,12 +6,12 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-from leukemic_det.params import * 
-from leukemic_det.api.fast import predict
+#from leukemic_det.params import *
+#from leukemic_det.api.fast import predict
 
 # Create a client object using the credentials file
 client = storage.Client()
-bucket = client.bucket(BUCKET_NAME)
+bucket = client.bucket('leukemic-1')
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
@@ -83,16 +83,16 @@ def show_img_prelim(img_sample : int):
     for blob in bucket.list_blobs(prefix=test_folder.name):
         image_path = blob.name
         test_image_paths.append(image_path)
-    
+
     test_imgs =[]
-    
-    
+
+
     blob = bucket.blob(test_image_paths[img_sample])
     image_bytes = blob.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
     test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
     test_imgs.append(test_img)
-    
+
     return test_imgs
 
 
@@ -103,6 +103,23 @@ st.markdown('Please select an image to be classified (1800 available):')
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
 
+def predict(img_sample : int):
+    """
+    Make a single image prediction
+    Assumes `img_sample' is provided as an integer index by the user
+    """
+
+    X_pred = load_test_img_prelim(img_sample)
+
+    assert model is not None
+
+    X_pred = np.expand_dims(X_pred, 0)
+    y_pred = model.predict(np.array(X_pred))
+
+    y_pred = (y_pred > 0.5).astype(int)
+
+    return y_pred
+
 if selected_img_number:
     j = selected_img_number[-1]
     j=j-1
@@ -110,7 +127,7 @@ if selected_img_number:
     st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
 
     # predict chosen image
-    
+
     predicted_class = predict(selected_img_number[-1])
 
     if predicted_class == 0:
@@ -135,26 +152,26 @@ if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
-    
-    
+
+
     # predict uploaded image
-    
+
     u = np.resize((image_u), (450, 450, 3))
     resized_u = np.array(u)
-    
-    X_pred = np.expand_dims(resized_u, 0)   
+
+    X_pred = np.expand_dims(resized_u, 0)
     y_pred = model.predict(np.array(X_pred))
-    
+
     predicted_class_u = (y_pred > 0.5).astype(int)
-    
+
     if predicted_class_u == 0:
         st.write('Healthy')
     else:
         st.write('Malignant')
-    
+
 
 st.markdown('')
 
 st.markdown('')
-    
+
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
