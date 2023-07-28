@@ -19,7 +19,7 @@ google-cloud-storage
 db-dtypes
 pyarrow
 streamlit
-mlflow==2.2.1
+mlflow==2.5.0
 
 python-dotenv
 prefect
