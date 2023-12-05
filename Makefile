@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := default
 #################### PACKAGE ACTIONS ###################
 reinstall_package:
-	@pip uninstall -y leukemic_cell_detective || :
+	@pip uninstall -y leukemic_cell_detective
 	@pip install -e .
 
 run_preprocess_and_train:
@@ -17,7 +17,6 @@ run_all: run_preprocess run_train run_pred run_evaluate
 
 run_workflow:
 	PREFECT__LOGGING__LEVEL=${PREFECT_LOG_LEVEL} python -m taxifare.interface.workflow
-
 
 
 run_api:

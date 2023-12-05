@@ -1,16 +1,16 @@
 
-import numpy as np 
-import pandas as pd 
+import numpy as np
+import pandas as pd
 import cv2 as cv
 from google.cloud import storage
 from leukemic_det.params import *
 from tqdm import tqdm
 
-# Set path to your service account credentials file
+# Set path to service account credentials file
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-
+# get the image paths from the GC bucket
 def get_path_image(folder):
     image_paths = []
     for blob in bucket.list_blobs(prefix=folder.name):
@@ -19,11 +19,9 @@ def get_path_image(folder):
     return image_paths
 
 
+# return imaging data as X and labels as y both as numpy arrays
 def load_and_preprocess_train_data(DATA_SIZE : int):
-    
-    # returns imaging data as X and labels as y both as numpy arrays
-    
-    
+
     all_0 = bucket.blob("C-NMC_Leukemia/training_data/fold_0/all")
     all_1 = bucket.blob("C-NMC_Leukemia/training_data/fold_1/all")
     all_2 = bucket.blob("C-NMC_Leukemia/training_data/fold_2/all")
@@ -31,41 +29,40 @@ def load_and_preprocess_train_data(DATA_SIZE : int):
     hem_0 = bucket.blob("C-NMC_Leukemia/training_data/fold_0/hem")
     hem_1 = bucket.blob("C-NMC_Leukemia/training_data/fold_1/hem")
     hem_2 = bucket.blob("C-NMC_Leukemia/training_data/fold_2/hem")
-    
+
     img_data = []
 
     for i in [all_0, all_1, all_2, hem_0, hem_1, hem_2]:
         paths = get_path_image(i)
-        
+
         img_data.extend(paths)
-        
-    
+
+
     data = {"img_data":img_data,
         "labels":[np.nan for x in range(len(img_data))]}
 
-    data = pd.DataFrame(data) 
+    data = pd.DataFrame(data)
     data.loc[0:7272, "labels"] = 1 # ALL
     data.loc[7272:, "labels"] = 0 # HEM
-    
+
     # shuffle the data
-    
     data = data.sample(frac=1).reset_index(drop=True)
-        
+
     img_list = []
-    
+
     for i in range(DATA_SIZE):
-        
+
         blob = bucket.blob(data['img_data'][i])
         image_bytes = blob.download_as_bytes()
         nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv.imdecode(nparr, cv.IMREAD_COLOR)
-        img_list.append(image)   
-    
-    
+        img_list.append(image)
+
+
     X = np.array(img_list)
     y = np.array(data['labels'])
     y = y[:DATA_SIZE]
-    
+
     return X, y
 
 def show_img_prelim(img_sample : int):
@@ -75,66 +72,34 @@ def show_img_prelim(img_sample : int):
     for blob in bucket.list_blobs(prefix=test_folder.name):
         image_path = blob.name
         test_image_paths.append(image_path)
-    
+
     test_imgs =[]
-    
+
     blob = bucket.blob(test_image_paths[img_sample])
     image_bytes = blob.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
     test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
     test_imgs.append(test_img)
-    
+
     return test_imgs
 
 
-def load_test_imgs(): # returns test images from GCS bucket leukemic-1
-    
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
-    for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
-    
-    
-    test_img_list = []
-
-    for i in tqdm(range(len(test_image_paths[:TEST_DATA_SIZE]))):
-        blob = bucket.blob(test_image_paths[i])
-        image_bytes = blob.download_as_bytes()
-        nparr = np.frombuffer(image_bytes, np.uint8)
-        test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-        test_img_list.append(test_img)
-    
-    
-    X_test= []
-    for i in test_img_list:
-        s = np.resize((i), (450, 450, 3))
-        X_test.append(s)
-    X_test = np.array(X_test)
-
-    test_img_labels = pd.read_csv('notebooks/test_labels')
-    y_test = np.array(test_img_labels['labels'])
-    y_test = y_test[:TEST_DATA_SIZE]
-
-    return X_test, y_test
-
 
 def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
-    
+
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
     test_image_paths = []
     for blob in bucket.list_blobs(prefix=test_folder.name):
         image_path = blob.name
         test_image_paths.append(image_path)
-    
-    
-        
+
+
+
     blob = bucket.blob(test_image_paths[img_sample])
     image_bytes = blob.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
     test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    
-    
+
 
     s = np.resize((test_img), (450, 450, 3))
     resized_test_img = np.array(s)

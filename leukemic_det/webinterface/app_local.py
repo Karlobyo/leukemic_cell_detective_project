@@ -6,6 +6,8 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
+import requests
+#from leukemic_det.ml_logic.data import load_test_img_prelim
 #from leukemic_det.params import *
 #from leukemic_det.api.fast import predict
 
@@ -13,11 +15,7 @@ import tensorflow
 client = storage.Client()
 bucket = client.bucket('leukemic-1')
 
-app = FastAPI()
-app.state.model = tensorflow.keras.models.load_model(
-            'cnn_base_simple')
-model = app.state.model
-
+model = tensorflow.keras.models.load_model('new_cnn_simple')
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -103,22 +101,6 @@ st.markdown('Please select an image to be classified (1800 available):')
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
 
-def predict(img_sample : int):
-    """
-    Make a single image prediction
-    Assumes `img_sample' is provided as an integer index by the user
-    """
-
-    X_pred = load_test_img_prelim(img_sample)
-
-    assert model is not None
-
-    X_pred = np.expand_dims(X_pred, 0)
-    y_pred = model.predict(np.array(X_pred))
-
-    y_pred = (y_pred > 0.5).astype(int)
-
-    return y_pred
 
 if selected_img_number:
     j = selected_img_number[-1]
@@ -128,7 +110,13 @@ if selected_img_number:
 
     # predict chosen image
 
-    predicted_class = predict(selected_img_number[-1])
+    leukemic_api_url = 'http://127.0.0.1:8000/predict'
+    params = {'img_sample':selected_img_number[-1]}
+    response = requests.get(leukemic_api_url, params=params)
+
+    prediction = response.json()
+
+    predicted_class = prediction['The sample cell is']
 
     if predicted_class == 0:
         st.write('Healthy')
@@ -137,7 +125,6 @@ if selected_img_number:
 
 
 # image uploader
-
 st.markdown('')
 
 st.markdown('***')
