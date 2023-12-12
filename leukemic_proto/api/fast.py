@@ -1,5 +1,5 @@
 import numpy as np
-from leukemic_det.ml_logic.data import show_img_prelim
+from leukemic_proto.ml_logic.data import show_img_prelim
 import tensorflow
 import cv2 as cv
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,7 +16,7 @@ app.add_middleware(
 )
 
 
-app.state.model = tensorflow.keras.models.load_model("/Users/carlobarbini/code/Karlobyo/leukemic_cell_detective_project/leukemic_det/webinterface/new_cnn_simple")
+app.state.model = tensorflow.keras.models.load_model("/Users/carlobarbini/code/Karlobyo/leukemic_proto/leukemic_proto/models/new_cnn_simple")
 model = app.state.model
 
 @app.get("/")

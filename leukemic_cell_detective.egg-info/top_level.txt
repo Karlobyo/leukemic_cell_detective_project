@@ -1,1 +1,1 @@
-leukemic_det
+leukemic_proto
