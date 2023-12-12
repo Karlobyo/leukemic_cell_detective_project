@@ -1,5 +1,5 @@
 import numpy as np
-from leukemic_proto.ml_logic.data import show_img_prelim
+from leukemic_det.ml_logic.data import show_img_prelim
 import tensorflow
 import cv2 as cv
 from fastapi.middleware.cors import CORSMiddleware
