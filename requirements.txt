@@ -32,3 +32,5 @@ uvicorn
 # tests
 httpx
 pytest-asyncio
+
+tqdm

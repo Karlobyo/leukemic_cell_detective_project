@@ -6,12 +6,13 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-#from leukemic_det.params import *
-#from leukemic_det.api.fast import predict
+from leukemic_det.params import *
+from leukemic_det.api.fast import predict
+from leukemic_det.ml_logic.data import show_img_prelim
 
 # Create a client object using the credentials file
 client = storage.Client()
-bucket = client.bucket('leukemic-1')
+bucket = client.bucket(BUCKET_NAME)
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
@@ -76,26 +77,6 @@ st.markdown('***')
 st.markdown('')
 
 
-def show_img_prelim(img_sample : int):
-
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
-    for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
-
-    test_imgs =[]
-
-
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    test_imgs.append(test_img)
-
-    return test_imgs
-
-
 # create multiselect widget for choosing an image
 
 st.markdown('Please select an image to be classified (1800 available):')
@@ -103,22 +84,6 @@ st.markdown('Please select an image to be classified (1800 available):')
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
 
-def predict(img_sample : int):
-    """
-    Make a single image prediction
-    Assumes `img_sample' is provided as an integer index by the user
-    """
-
-    X_pred = load_test_img_prelim(img_sample)
-
-    assert model is not None
-
-    X_pred = np.expand_dims(X_pred, 0)
-    y_pred = model.predict(np.array(X_pred))
-
-    y_pred = (y_pred > 0.5).astype(int)
-
-    return y_pred
 
 if selected_img_number:
     j = selected_img_number[-1]

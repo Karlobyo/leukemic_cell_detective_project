@@ -21,7 +21,7 @@ run_workflow:
 
 
 run_api:
-	uvicorn leukemic_det.api.fast:app --reload
+	uvicorn leukemic_det.api.fast:app --port 8000
 
 
 clean:
