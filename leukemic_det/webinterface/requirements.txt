@@ -1,6 +1,0 @@
-opencv-python-headless
-streamlit
-numpy
-tensorflow
-fastapi
-google-cloud-storage

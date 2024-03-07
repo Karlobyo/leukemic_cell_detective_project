@@ -6,6 +6,7 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
+
 from leukemic_det.params import *
 from leukemic_det.api.fast import predict
 from leukemic_det.ml_logic.data import show_img_prelim
@@ -14,11 +15,7 @@ from leukemic_det.ml_logic.data import show_img_prelim
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-app = FastAPI()
-app.state.model = tensorflow.keras.models.load_model(
-            'cnn_base_simple')
-model = app.state.model
-
+model = tensorflow.keras.models.load_model('../models/new_cnn_simple')
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -76,6 +73,27 @@ st.markdown('***')
 
 st.markdown('')
 
+def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
+
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+
+
+
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+
+
+    s = np.resize((test_img), (450, 450, 3))
+    resized_test_img = np.array(s)
+
+    return resized_test_img
+
 
 # create multiselect widget for choosing an image
 
@@ -83,6 +101,7 @@ st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
+
 
 
 if selected_img_number:
@@ -93,6 +112,14 @@ if selected_img_number:
 
     # predict chosen image
 
+    # leukemic_api_url = 'http://127.0.0.1:8000/predict'
+    # params = {'img_sample':selected_img_number[-1]}
+    # response = requests.get(leukemic_api_url, params=params)
+
+    # prediction = response.json()
+
+    # predicted_class = prediction['The sample cell is']
+
     predicted_class = predict(selected_img_number[-1])
 
     if predicted_class == 0:
@@ -102,7 +129,6 @@ if selected_img_number:
 
 
 # image uploader
-
 st.markdown('')
 
 st.markdown('***')
