@@ -29,3 +29,5 @@ mlruns
 *.sqlite
 # IDE #
 *.vscode
+
+.python-version

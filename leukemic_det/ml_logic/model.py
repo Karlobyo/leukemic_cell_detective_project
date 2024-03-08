@@ -5,11 +5,11 @@ from colorama import Fore, Style
 from keras.applications.vgg16 import VGG16
 from keras import optimizers
 
-
+# model architecture
 def load_base_model():
 
     model = models.Sequential()
-    
+
     model.add(layers.Rescaling(1./450, input_shape=(450,450,3)))
 
     model.add(layers.Conv2D(8, (5, 5), input_shape = (450, 450, 3), activation='relu', padding='same'))
@@ -30,6 +30,8 @@ def load_base_model():
     return model
 
 
+
+# VGG16 Transfer Learning model
 def load_VGG16_model():
 
     VGG_model = VGG16(weights="imagenet", include_top=False, input_shape=(450, 450, 3))
@@ -53,7 +55,7 @@ def load_VGG16_model():
 
     return model
 
-
+# model evaluation
 def evaluate_model(model: models,
                    X: np.ndarray,
                    y: np.ndarray):
