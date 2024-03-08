@@ -15,7 +15,7 @@ from leukemic_det.ml_logic.data import show_img_prelim
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-model = tensorflow.keras.models.load_model('../models/new_cnn_simple')
+model = tensorflow.keras.models.load_model('new_cnn_simple')
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
