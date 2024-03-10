@@ -5,7 +5,6 @@ leukemic_cell_detective.egg-info/SOURCES.txt
 leukemic_cell_detective.egg-info/dependency_links.txt
 leukemic_cell_detective.egg-info/requires.txt
 leukemic_cell_detective.egg-info/top_level.txt
-
 leukemic_det/__init__.py
 leukemic_det/params.py
 leukemic_det/api/__init__.py
