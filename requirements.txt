@@ -266,7 +266,7 @@ stack-data==0.5.1
 starlette==0.36.3
 statsmodels==0.13.2
 stopit==1.1.2
-streamlit==1.11.1
+streamlit
 sympy==1.12
 tangled-up-in-unicode==0.2.0
 tenacity==8.1.0
