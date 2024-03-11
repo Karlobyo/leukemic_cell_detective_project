@@ -15,8 +15,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
-app.state.model = tensorflow.keras.models.load_model("/Users/carlobarbini/code/Karlobyo/leukemic_proto/leukemic_proto/models/new_cnn_simple")
+app.state.model = tensorflow.keras.models.load_model("/Users/mac1/code/Karlobyo/leukemic_cell_detective_project/leukemic_cell_detective_project/leukemic_det/webinterface/cnn_base_simple")
 model = app.state.model
 
 @app.get("/")
