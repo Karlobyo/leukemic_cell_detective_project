@@ -6,7 +6,7 @@ WORKDIR /prod
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY taxifare taxifare
+COPY leukemic_det leukemic_det
 COPY setup.py setup.py
 RUN pip install .
 
