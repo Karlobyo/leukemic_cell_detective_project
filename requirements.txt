@@ -140,7 +140,6 @@ Keras-Preprocessing==1.1.2
 kiwisolver==1.4.4
 kubernetes==29.0.0
 lazy-object-proxy==1.7.1
--e git+ssh://git@github.com/Karlobyo/leukemic_cell_detective_project.git@1b9ce841be40b7bab5df1abefef714275d55eb51#egg=leukemic_cell_detective
 libclang==14.0.6
 locket==1.0.0
 lxml==4.9.1
