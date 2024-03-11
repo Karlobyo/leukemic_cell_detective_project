@@ -14,7 +14,6 @@ googleapis-common-protos==1.56.4
 fastapi
 numpy
 pandas
-base64
 streamlit
 tensorflow==2.15.0
 opencv-python-headless==4.9.0.80
