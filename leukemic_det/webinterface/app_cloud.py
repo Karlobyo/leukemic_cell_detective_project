@@ -13,7 +13,7 @@ bucket = client.bucket('leukemic-1')
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
-            'new_cnn_simple')
+            'cnn_base_simple')
 model = app.state.model
 
 
