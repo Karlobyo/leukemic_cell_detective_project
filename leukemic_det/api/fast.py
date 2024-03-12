@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-app.state.model = tensorflow.keras.models.load_model("cnn_base_simple2")
+app.state.model = tensorflow.keras.models.load_model("cnn_base_simple")
 model = app.state.model
 
 @app.get("/")
