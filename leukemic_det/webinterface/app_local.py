@@ -151,7 +151,7 @@ if uploaded_file is not None:
     resized_u = np.array(u)
 
     X_pred = np.expand_dims(resized_u, 0)
-    y_pred = model.predict(np.array(X_pred))
+    y_pred = predict(np.array(X_pred))
 
     predicted_class_u = (y_pred > 0.5).astype(int)
 
