@@ -47,7 +47,7 @@ h2 {color: black;
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-add_bg_from_local('images/lympho.png')
+add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 
 st.title('Leukemic Cell Detective')
 
