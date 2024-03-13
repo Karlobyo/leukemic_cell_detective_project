@@ -6,7 +6,6 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
-import io
 
 # Create a client object using the credentials file
 client = storage.Client()
@@ -14,7 +13,7 @@ bucket = client.bucket('leukemic-1')
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
-            'leukemic_proto/webinterface/cnn_base_simple')
+            'model_dir/20240312-114546.h5')
 model = app.state.model
 
 
@@ -48,7 +47,7 @@ h2 {color: black;
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-add_bg_from_local('leukemic_proto/webinterface/images/lympho.png')
+add_bg_from_local('images/lympho.png')
 
 st.title('Leukemic Cell Detective')
 

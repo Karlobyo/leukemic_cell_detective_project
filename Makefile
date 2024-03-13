@@ -1,17 +1,17 @@
 .DEFAULT_GOAL := default
 #################### PACKAGE ACTIONS ###################
 reinstall_package:
-	@pip uninstall -y leukemic_proto
+	@pip uninstall -y leukemic_det
 	@pip install -e .
 
 run_preprocess_and_train:
-	python -c 'from leukemic_proto.interface.main import preprocess_and_train; preprocess_and_train()'
+	python -c 'from leukemic_det.interface.main import preprocess_and_train; preprocess_and_train()'
 
 run_pred:
-	python -c 'from leukemic_proto.interface.main import pred; pred()'
+	python -c 'from leukemic_det.interface.main import pred; pred()'
 
 run_evaluate:
-	python -c 'from leukemic_proto.interface.main import evaluate; evaluate()'
+	python -c 'from leukemic_det.interface.main import evaluate; evaluate()'
 
 run_all: run_preprocess run_train run_pred run_evaluate
 
@@ -20,7 +20,7 @@ run_workflow:
 
 
 run_api:
-	uvicorn leukemic_det.api.fast:app --port 8000
+	@uvicorn leukemic_det.api.fast:app --port 8000
 
 
 clean:

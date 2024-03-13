@@ -4,7 +4,6 @@ import pandas as pd
 import cv2 as cv
 from google.cloud import storage
 from leukemic_det.params import *
-from tqdm import tqdm
 
 # Set path to service account credentials file
 client = storage.Client()
