@@ -4,7 +4,6 @@ streamlit
 numpy
 fastapi
 pandas
-cv2
 base64
 
 google-api-core==2.10.2
