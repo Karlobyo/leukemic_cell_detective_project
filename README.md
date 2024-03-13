@@ -18,4 +18,4 @@ https://leukemiccelldetectiveproject-zwedgvazyvzjlpwdoxkoze.streamlit.app/
 Would you like to try and run the app locally from your machine? Clone the repo from your terminal >
 git clone git@github.com:Karlobyo/leukemic_cell_detective_project.git
 
-once you are in the local repo directory run > streamlit run leukemic_det/webinterface/app_local.py > there it goes!
+once you are in the local repo directory run make streamlit > there it goes!
