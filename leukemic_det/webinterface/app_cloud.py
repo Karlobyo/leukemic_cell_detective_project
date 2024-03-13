@@ -13,7 +13,7 @@ bucket = client.bucket('leukemic-1')
 
 app = FastAPI()
 app.state.model = tensorflow.keras.models.load_model(
-            'model_dir/20240312-114546.h5')
+            'leukemic_det/webinterface/model_dir/20240312-114546.h5')
 model = app.state.model
 
 
