@@ -6,16 +6,17 @@ import base64
 from fastapi import FastAPI
 from google.cloud import storage
 import tensorflow
+import requests
 
 from leukemic_det.params import *
-from leukemic_det.api.fast import predict
+#from leukemic_det.api.fast import predict
 from leukemic_det.ml_logic.data import show_img_prelim
 
 # Create a client object using the credentials file
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-model = tensorflow.keras.models.load_model('../models/new_cnn_simple')
+model = tensorflow.keras.models.load_model("/Users/mac1/code/Karlobyo/leukemic_cell_detective_project/leukemic_cell_detective_project/leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -73,6 +74,29 @@ st.markdown('***')
 
 st.markdown('')
 
+def predict(img_sample : int):
+    """
+    Make a single image prediction
+    Assumes `img_sample' is provided as an integer index by the user
+    """
+
+    im = show_img_prelim(img_sample)
+
+    u = np.resize((im), (450, 450, 3))
+    resized_u = np.array(u)
+
+    X_pred = np.expand_dims(resized_u, 0)
+
+    y_pred = model.predict(np.array(X_pred))
+
+    predicted_class_u = (y_pred > 0.5).astype(int)
+
+    if predicted_class_u == 0:
+        return {"The sample cell is":'Healthy'}
+    else:
+        return {"The sample cell is":'Malignant'}
+
+
 def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket leukemic-1
 
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
@@ -112,7 +136,8 @@ if selected_img_number:
 
     # predict chosen image
 
-    # leukemic_api_url = 'http://127.0.0.1:8000/predict'
+    # use api
+    # leukemic_api_url = f'{URL}/predict'
     # params = {'img_sample':selected_img_number[-1]}
     # response = requests.get(leukemic_api_url, params=params)
 
@@ -151,7 +176,7 @@ if uploaded_file is not None:
     resized_u = np.array(u)
 
     X_pred = np.expand_dims(resized_u, 0)
-    y_pred = model.predict(np.array(X_pred))
+    y_pred = predict(np.array(X_pred))
 
     predicted_class_u = (y_pred > 0.5).astype(int)
 
