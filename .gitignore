@@ -1,10 +1,13 @@
 .env
+.env.yaml
 # Object file
 *.o
 
 # Ada Library Information
 *.ali
 
+
+.python-version
 
 # OS generated files #
 ######################
@@ -29,3 +32,5 @@ mlruns
 *.sqlite
 # IDE #
 *.vscode
+
+.python-version

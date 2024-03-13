@@ -11,11 +11,13 @@ import tensorflow
 client = storage.Client()
 bucket = client.bucket('leukemic-1')
 
-app = FastAPI()
-app.state.model = tensorflow.keras.models.load_model(
-            'new_cnn_simple')
-model = app.state.model
+# app = FastAPI()
+# app.state.model = tensorflow.keras.models.load_model(
+#             'leukemic_det/webinterface/model_dir/20240312-114546.h5')
+# model = app.state.model
 
+model = tensorflow.keras.models.load_model(
+             'leukemic_det/webinterface/model_dir/20240312-114546.h5')
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -47,7 +49,8 @@ h2 {color: black;
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-add_bg_from_local('images/lympho.png')
+add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
+
 
 st.title('Leukemic Cell Detective')
 

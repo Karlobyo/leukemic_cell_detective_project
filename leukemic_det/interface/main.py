@@ -4,7 +4,7 @@ from pathlib import Path
 from colorama import Fore, Style
 from leukemic_det.params import *
 from leukemic_det.ml_logic.data import load_and_preprocess_train_data
-from leukemic_det.ml_logic.data import load_test_imgs
+from leukemic_det.ml_logic.data import load_test_img_prelim
 from leukemic_det.ml_logic.data import load_test_img_prelim
 from leukemic_det.ml_logic.registry import mlflow_run
 from keras.callbacks import EarlyStopping
@@ -15,7 +15,7 @@ from tqdm import tqdm
 def preprocess_and_train() -> float:
     """
     - Fetch data from GCS and preprocess
-    - Train on the preprocessed data 
+    - Train on the preprocessed data
     - Store model weights
 
     Return val_accuracy as float
@@ -29,42 +29,42 @@ def preprocess_and_train() -> float:
     from leukemic_det.ml_logic.registry import mlflow_transition_model
 
     print(Fore.BLUE + "\nLoading and preprocessing data..." + Style.RESET_ALL)
-    
-    
+
+
     X, y = tqdm(load_and_preprocess_train_data(DATA_SIZE))
-    
-    split_ratio = 0.2 
-    
+
+    split_ratio = 0.2
+
     train_length = int(len(X)*(1-split_ratio))
 
     X_train = X[0:train_length]
     X_val = X[train_length:]
     y_train = y[0:train_length]
     y_val = y[train_length:]
-    
+
     X_s = X_train.shape
     y_s = y_train.shape
-    
+
     print(Fore.CYAN + f"X_train shape is {X_s}" + Style.RESET_ALL)
     print(Fore.CYAN + f"y_train shape is {y_s}" + Style.RESET_ALL)
 
-    
-    # Train model 
+
+    # Train model
     if MODEL == "base":
         model = load_base_model()
     elif MODEL == "vgg":
         model = load_VGG16_model()
-        
+
     es = EarlyStopping(patience=5)
-    
+
     print(Fore.BLUE + "\nTraining the model..." + Style.RESET_ALL)
-    
+
     history = model.fit(X_train, y_train,
                                  batch_size=64,
                                  callbacks=[es],
                                  validation_data=(X_val, y_val), epochs=25, verbose=1)
 
-    
+
     val_accuracy = history.history['val_accuracy'][-1]
 
     params = dict(
@@ -84,7 +84,7 @@ def preprocess_and_train() -> float:
     print("✅ preprocess_and_train() done \n")
     print(f"The model has an accuracy of {val_accuracy}")
     return val_accuracy
-    
+
 
 @mlflow_run
 def evaluate(stage: str = "Production") -> float:
@@ -99,7 +99,7 @@ def evaluate(stage: str = "Production") -> float:
     model = load_model(stage=stage)
     assert model is not None
 
-    X, y = load_test_imgs()
+    X, y = load_test_img_prelim()
 
     metrics_dict = evaluate_model(model=model, X=X, y=y)
     accuracy = metrics_dict["accuracy"]
@@ -113,7 +113,7 @@ def evaluate(stage: str = "Production") -> float:
     save_results(params=params, metrics=metrics_dict)
 
     print("✅ evaluate() done \n")
-    
+
     return accuracy
 
 
@@ -125,7 +125,7 @@ def pred(X_pred: np.ndarray = None) -> int:
     print("\n⭐️ Use case: predict")
 
     from leukemic_det.ml_logic.registry import load_model
-    
+
     if X_pred is None:
        X_pred = load_test_img_prelim(np.random.randint(low=0, high=1000))
 
