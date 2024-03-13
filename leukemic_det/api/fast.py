@@ -17,6 +17,7 @@ app.add_middleware(
 
 
 app.state.model = tensorflow.keras.models.load_model("leukemic_det/api/model_dir/20240312-114546.h5")
+
 model = app.state.model
 
 @app.get("/")
