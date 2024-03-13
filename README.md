@@ -16,6 +16,6 @@ https://leukemiccelldetectiveproject-zwedgvazyvzjlpwdoxkoze.streamlit.app/
 ! If the markdowns look grey and are hard to read, it means you have the theme set to 'Light'. You can set the theme to "Dark" in the drop-down menu on the top-right corner under "Settings" !
 
 Would you like to try and run the app locally from your machine? Clone the repo from your terminal >
-git clone https://github.com/Karlobyo/leukemic_cell_detective_project.git
+git clone git@github.com:Karlobyo/leukemic_cell_detective_project.git
 
-once you are in the webinterface directory run streamlit run app_local.py > there it goes!
+once you are in the local repo directory run > streamlit run leukemic_det/webinterface/app_local.py > there it goes!
