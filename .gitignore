@@ -29,3 +29,5 @@ mlruns
 *.sqlite
 # IDE #
 *.vscode
+
+leukemic_cell_detective.egg-info
