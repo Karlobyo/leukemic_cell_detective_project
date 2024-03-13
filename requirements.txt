@@ -18,7 +18,7 @@ pandas
 streamlit
 tensorflow
 opencv-python-headless==4.9.0.80
-
+pyarrow
 
 google-cloud-bigquery
 google-cloud-storage
