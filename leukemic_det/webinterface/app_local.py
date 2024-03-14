@@ -16,7 +16,10 @@ from leukemic_det.ml_logic.data import show_img_prelim
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-model = tensorflow.keras.models.load_model("/Users/mac1/code/Karlobyo/leukemic_cell_detective_project/leukemic_cell_detective_project/leukemic_det/webinterface/model_dir/20240312-114546.h5")
+# model = tensorflow.keras.models.load_model(
+#     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
+model = tensorflow.keras.models.load_model(
+    "leukemic_det/webinterface/new_cnn_simple")
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -48,7 +51,7 @@ h2 {color: black;
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-add_bg_from_local('images/lympho.png')
+add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 
 st.title('Leukemic Cell Detective')
 
@@ -176,7 +179,7 @@ if uploaded_file is not None:
     resized_u = np.array(u)
 
     X_pred = np.expand_dims(resized_u, 0)
-    y_pred = predict(np.array(X_pred))
+    y_pred = model.predict(np.array(X_pred))
 
     predicted_class_u = (y_pred > 0.5).astype(int)
 
