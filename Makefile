@@ -8,19 +8,6 @@ reinstall_package:
 	@pip install -e .
 
 
-# workflow
-
-run_preprocess_and_train:
-	python -c 'from leukemic_det.interface.main import preprocess_and_train; preprocess_and_train()'
-
-run_pred:
-	python -c 'from leukemic_det.interface.main import pred; pred()'
-
-run_evaluate:
-	python -c 'from leukemic_det.interface.main import evaluate; evaluate()'
-
-run_all: run_preprocess run_train run_pred run_evaluate
-
 
 # local api testing
 
@@ -42,22 +29,3 @@ clean:
 	@rm -Rf */*.pyc
 
 all: install clean
-
-
-
-reset_local_files:
-	rm -rf ${ML_DIR}
-	mkdir ~/.leukemic/mlops/training_outputs
-	mkdir ~/.leukemic/mlops/training_outputs/metrics
-	mkdir ~/.leukemic/mlops/training_outputs/models
-	mkdir ~/.leukemic/mlops/training_outputs/params
-
-
-
-show_sources_all:
-	-ls -laR ~/.leukemic/mlops/data
-	-bq ls ${BQ_DATASET}
-	-bq show ${BQ_DATASET}.processed_1k
-	-bq show ${BQ_DATASET}.processed_2k
-	-bq show ${BQ_DATASET}.processed_all
-	-gsutil ls gs://${BUCKET_NAME}
