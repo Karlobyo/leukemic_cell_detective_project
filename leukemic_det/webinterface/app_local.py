@@ -9,14 +9,13 @@ import tensorflow
 import requests
 
 from leukemic_det.params import *
-#from leukemic_det.api.fast import predict
-from leukemic_det.ml_logic.data import show_img_prelim
 
 # Create a client object using the credentials file
 client = storage.Client()
 bucket = client.bucket(BUCKET_NAME)
 
-model = tensorflow.keras.models.load_model("/Users/mac1/code/Karlobyo/leukemic_cell_detective_project/leukemic_cell_detective_project/leukemic_det/webinterface/model_dir/20240312-114546.h5")
+model = tensorflow.keras.models.load_model(
+    "leukemic_det/webinterface/new_cnn_simple")
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -73,6 +72,25 @@ st.markdown('This is a research preview of a convolution neural network deep lea
 st.markdown('***')
 
 st.markdown('')
+
+def show_img_prelim(img_sample : int):
+
+    # getting bucket paths of test images
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+
+    # deconding the imgs paths into images
+    test_imgs =[]
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    test_imgs.append(test_img)
+
+    return test_imgs
 
 def predict(img_sample : int):
     """
