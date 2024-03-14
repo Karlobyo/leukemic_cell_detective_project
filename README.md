@@ -11,7 +11,6 @@ This is a convolution neural network deep learning app meant to deliver real-tim
 
 
 Public link:
-https://leukemiccelldetectiveproject-zwedgvazyvzjlpwdoxkoze.streamlit.app/
+https://leukemiccelldetectiveproject-pbdcaivxtrqpefrwfbua7d.streamlit.app/
 
 ! If the markdowns look grey and are hard to read, it means you have the theme set to 'Light'. You can set the theme to "Dark" in the drop-down menu on the top-right corner under "Settings" !
-
