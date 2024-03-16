@@ -42,11 +42,11 @@ def predict(img_sample : int):
 
     X_pred = np.expand_dims(resized_u, 0)
 
-    y_pred = model.predict(np.array(X_pred))
+    y_pred = model.predict(X_pred)
 
-    predicted_class_u = (y_pred > 0.5).astype(int)
+    predicted_class = (y_pred > 0.5).astype(int)
 
-    if predicted_class_u == 0:
+    if predicted_class == 0:
         return {"The sample cell is":'Healthy'}
     else:
         return {"The sample cell is":'Malignant'}

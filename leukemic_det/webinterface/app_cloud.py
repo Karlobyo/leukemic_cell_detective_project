@@ -147,6 +147,8 @@ st.markdown('Or upload an image from your browser:')
 uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
 
 if uploaded_file is not None:
+
+    # decode
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
 
