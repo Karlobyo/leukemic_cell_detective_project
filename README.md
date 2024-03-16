@@ -11,11 +11,6 @@ This is a convolution neural network deep learning app meant to deliver real-tim
 
 
 Public link:
-https://karlobyo-leukemic-cell-leukemic-detwebinterfaceapp-cloud-3tpp43.streamlit.app/
+https://leukemiccelldetectiveproject-pbdcaivxtrqpefrwfbua7d.streamlit.app/
 
 ! If the markdowns look grey and are hard to read, it means you have the theme set to 'Light'. You can set the theme to "Dark" in the drop-down menu on the top-right corner under "Settings" !
-
-Would you like to try and run the app locally from your machine? Clone the repo from your terminal > 
-git clone https://github.com/Karlobyo/leukemic_cell_detective_project.git
-
-once you are in the webinterface directory run streamlit run app_local.py > there it goes!
