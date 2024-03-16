@@ -1,3 +1,4 @@
+
 import streamlit as st
 
 import base64
@@ -11,20 +12,17 @@ from fastapi import FastAPI
 
 from google.cloud import storage
 
+# functions
+from leukemic_det.ml_logic.data_classification import show_img_prelim, predict
+
+
 # Create a client object using the credentials file
 client = storage.Client()
-bucket = client.bucket('leukemic-1')
-
-
-### loading the model when not docker image URL is not running ###
+bucket = client.bucket("leukemic-1")
 
 model = tensorflow.keras.models.load_model(
-             'leukemic_det/webinterface/model_dir/20240312-114546.h5')
+    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
-
-### needed functions ###
-
-## bg image ##
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -40,51 +38,7 @@ def add_bg_from_local(image_file):
     unsafe_allow_html=True
     )
 
-## display images ##
-def show_img_prelim(img_sample : int):
 
-    # getting bucket paths of test images
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
-    for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
-
-    # deconding the imgs paths into images
-    test_imgs =[]
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    test_imgs.append(test_img)
-
-    return test_imgs
-
-## classify images ##
-def predict(img_sample : int):
-    """
-    Make a single image prediction
-    Assumes `img_sample' is provided as an integer index by the user
-    """
-
-    im = show_img_prelim(img_sample)
-
-    u = np.resize((im), (450, 450, 3))
-    resized_u = np.array(u)
-
-    X_pred = np.expand_dims(resized_u, 0)
-
-    y_pred = model.predict(np.array(X_pred))
-
-    predicted_class_u = (y_pred > 0.5).astype(int)
-
-    if predicted_class_u == 0:
-        return {"The sample cell is":'Healthy'}
-    else:
-        return {"The sample cell is":'Malignant'}
-
-
-### streamlit code ###
 st.set_page_config(layout='wide')
 
 CSS = """
@@ -100,7 +54,6 @@ h2 {color: black;
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
 add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
-
 
 st.title('Leukemic Cell Detective')
 
@@ -127,12 +80,14 @@ st.markdown('***')
 st.markdown('')
 
 
-
 # create multiselect widget for choosing an image
+
 st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
+
+
 
 if selected_img_number:
     j = selected_img_number[-1]
@@ -141,6 +96,16 @@ if selected_img_number:
     st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
 
     # predict chosen image
+
+    # use api
+    # leukemic_api_url = f'{URL}/predict'
+    # params = {'img_sample':selected_img_number[-1]}
+    # response = requests.get(leukemic_api_url, params=params)
+
+    # prediction = response.json()
+
+    # predicted_class = prediction['The sample cell is']
+
     predicted_class = predict(selected_img_number[-1])
 
     if predicted_class == 0:
@@ -167,6 +132,7 @@ if uploaded_file is not None:
 
 
     # predict uploaded image
+
     u = np.resize((image_u), (450, 450, 3))
     resized_u = np.array(u)
 
