@@ -7,8 +7,6 @@ import cv2 as cv
 import numpy as np
 import tensorflow as tf
 
-import requests
-
 from google.cloud import storage
 
 
@@ -128,7 +126,6 @@ st.markdown('')
 
 
 # create multiselect widget for choosing an image
-
 st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
@@ -143,16 +140,6 @@ if selected_img_number:
     st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
 
     # predict chosen image
-
-    # use api
-    # leukemic_api_url = f'{URL}/predict'
-    # params = {'img_sample':selected_img_number[-1]}
-    # response = requests.get(leukemic_api_url, params=params)
-
-    # prediction = response.json()
-
-    # predicted_class = prediction['The sample cell is']
-
     predicted_class = predict(selected_img_number[-1])
 
     if predicted_class == 0:
