@@ -1,11 +1,15 @@
-
-import cv2 as cv
 import streamlit as st
-import numpy as np
+
 import base64
-from fastapi import FastAPI
-from google.cloud import storage
+import cv2 as cv
+
+import numpy as np
 import tensorflow
+
+import requests
+from fastapi import FastAPI
+
+from google.cloud import storage
 
 # Create a client object using the credentials file
 client = storage.Client()
@@ -15,7 +19,7 @@ bucket = client.bucket('leukemic-1')
 ### loading the model when not docker image URL is not running ###
 
 model = tensorflow.keras.models.load_model(
-             'model_dir/20240312-114546.h5')
+             'leukemic_det/webinterface/model_dir/20240312-114546.h5')
 
 
 ### needed functions ###
@@ -95,7 +99,7 @@ h2 {color: black;
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-add_bg_from_local('images/lympho.png')
+add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 
 
 st.title('Leukemic Cell Detective')
