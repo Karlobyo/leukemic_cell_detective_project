@@ -1,9 +1,12 @@
 import numpy as np
-from leukemic_det.ml_logic.data import show_img_prelim
 import tensorflow
+
 import cv2 as cv
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, File
+
+from leukemic_det.ml_logic.data_classification import show_img_prelim
 
 app = FastAPI()
 

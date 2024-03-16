@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 import base64
@@ -42,27 +41,16 @@ def show_img_prelim(img_sample : int):
     return test_imgs
 
 # classify image
-def predict(img_sample : int):
+def predict(X_pred):
     """
     Makes a single image prediction
-    Assumes `img_sample' is provided as an integer index by the user
+    Returns 0 for healthy and 1 for malignant
     """
-
-    im = show_img_prelim(img_sample)
-
-    u = np.resize((im), (450, 450, 3))
-    resized_u = np.array(u)
-
-    X_pred = np.expand_dims(resized_u, 0)
-
-    y_pred = model.predict(np.array(X_pred))
-
-    predicted_class_u = (y_pred > 0.5).astype(int)
-
-    if predicted_class_u == 0:
-        return {"The sample cell is":'Healthy'}
-    else:
-        return {"The sample cell is":'Malignant'}
+    resized = np.resize((X_pred), (450, 450, 3))
+    X_pred = np.expand_dims(resized, 0)
+    y_pred = model.predict(X_pred)
+    predicted_class = (y_pred > 0.5).astype(int)
+    return predicted_class
 
 
 
@@ -131,15 +119,15 @@ img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
 
 
-
 if selected_img_number:
-    j = selected_img_number[-1]
-    j=j-1
-    im = show_img_prelim(j)
-    st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
+    img_index = selected_img_number[-1]
+    img = show_img_prelim(img_index)
 
-    # predict chosen image
-    predicted_class = predict(selected_img_number[-1])
+    # display the selected image
+    st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
+
+    # classify selected image
+    predicted_class = predict(img)
 
     if predicted_class == 0:
         st.write('Healthy')
@@ -161,18 +149,12 @@ uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+
+    # show uploaded image
     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
 
-
-    # predict uploaded image
-
-    u = np.resize((image_u), (450, 450, 3))
-    resized_u = np.array(u)
-
-    X_pred = np.expand_dims(resized_u, 0)
-    y_pred = model.predict(np.array(X_pred))
-
-    predicted_class_u = (y_pred > 0.5).astype(int)
+    # classify uploaded image
+    predicted_class_u = predict(image_u)
 
     if predicted_class_u == 0:
         st.write('Healthy')
