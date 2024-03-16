@@ -123,7 +123,7 @@ if selected_img_number:
     img_index = selected_img_number[-1]
     img = show_img_prelim(img_index)
 
-    # display the selected image
+    # display selected image
     st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
 
     # classify selected image
@@ -152,7 +152,7 @@ if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
 
-    # show uploaded image
+    # display uploaded image
     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
 
     # classify uploaded image
