@@ -10,7 +10,6 @@ import tensorflow as tf
 from google.cloud import storage
 
 
-
 # Create a client object
 client = storage.Client()
 bucket = client.bucket("leukemic-1")
