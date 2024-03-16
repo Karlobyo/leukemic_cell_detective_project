@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from google.cloud import storage
 
 # functions
-from data_classification import show_img_prelim, predict
+from webinterface.data_classification import show_img_prelim, predict
 
 
 # Create a client object using the credentials file
