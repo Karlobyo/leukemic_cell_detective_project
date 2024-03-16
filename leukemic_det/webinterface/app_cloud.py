@@ -1,24 +1,72 @@
 
-import cv2 as cv
 import streamlit as st
-import numpy as np
+
 import base64
-from fastapi import FastAPI
+import cv2 as cv
+
+import numpy as np
+import tensorflow as tf
+
 from google.cloud import storage
-import tensorflow
 
-# Create a client object using the credentials file
+
+# Create a client object
 client = storage.Client()
-bucket = client.bucket('leukemic-1')
+bucket = client.bucket("leukemic-1")
 
-# app = FastAPI()
-# app.state.model = tensorflow.keras.models.load_model(
-#             'leukemic_det/webinterface/model_dir/20240312-114546.h5')
-# model = app.state.model
+# load the model if the docker image url is not running
+model = tf.keras.models.load_model(
+    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
-model = tensorflow.keras.models.load_model(
-             'leukemic_det/webinterface/model_dir/20240312-114546.h5')
 
+### functions ###
+
+# display image
+def show_img_prelim(img_sample : int):
+
+    # getting bucket paths of test images
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+
+    # deconding the imgs paths into images
+    test_imgs =[]
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    test_imgs.append(test_img)
+
+    return test_imgs
+
+# classify image
+def predict(img_sample : int):
+    """
+    Makes a single image prediction
+    Assumes `img_sample' is provided as an integer index by the user
+    """
+
+    im = show_img_prelim(img_sample)
+
+    u = np.resize((im), (450, 450, 3))
+    resized_u = np.array(u)
+
+    X_pred = np.expand_dims(resized_u, 0)
+
+    y_pred = model.predict(np.array(X_pred))
+
+    predicted_class_u = (y_pred > 0.5).astype(int)
+
+    if predicted_class_u == 0:
+        return {"The sample cell is":'Healthy'}
+    else:
+        return {"The sample cell is":'Malignant'}
+
+
+
+# add bg image
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -51,7 +99,6 @@ st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
 add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 
-
 st.title('Leukemic Cell Detective')
 
 
@@ -77,68 +124,13 @@ st.markdown('***')
 st.markdown('')
 
 
-def show_img_prelim(img_sample : int):
-
-    # getting bucket paths of test images
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
-    for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
-
-    # deconding the imgs paths into images
-    test_imgs =[]
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    test_imgs.append(test_img)
-
-    return test_imgs
-
-def load_test_img_prelim(img_sample: int): # returns unlabelled images from GCS bucket
-
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
-    for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
-
-
-
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-
-    s = np.resize((test_img), (450, 450, 3))
-    resized_test_img = np.array(s)
-
-    return resized_test_img
-
-def predict(img_sample : int):
-    """
-    Make a single image prediction
-    Assumes `img_sample' is provided as an integer index by the user
-    """
-
-    X_pred = load_test_img_prelim(img_sample)
-
-    assert model is not None
-
-    X_pred = np.expand_dims(X_pred, 0)
-    y_pred = model.predict(np.array(X_pred))
-
-    y_pred = (y_pred > 0.5).astype(int)
-
-    return y_pred
-
 # create multiselect widget for choosing an image
-
 st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
+
+
 
 if selected_img_number:
     j = selected_img_number[-1]
@@ -147,7 +139,6 @@ if selected_img_number:
     st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
 
     # predict chosen image
-
     predicted_class = predict(selected_img_number[-1])
 
     if predicted_class == 0:
@@ -157,7 +148,6 @@ if selected_img_number:
 
 
 # image uploader
-
 st.markdown('')
 
 st.markdown('***')
