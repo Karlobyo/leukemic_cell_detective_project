@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from google.cloud import storage
 
 # functions
-from leukemic_det.ml_logic.data_classification import show_img_prelim, predict
+from leukemic_det.webinterface.data_classification import show_img_prelim, predict
 
 
 # Create a client object using the credentials file
