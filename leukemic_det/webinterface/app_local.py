@@ -90,10 +90,9 @@ selected_img_number = st.multiselect('', img_number)
 
 
 if selected_img_number:
-    j = selected_img_number[-1]
-    j=j-1
-    im = show_img_prelim(j)
-    st.image(im, width=200, caption=f'Human white blood cell #{j+1}')
+    img_index = selected_img_number[-1]
+    img = show_img_prelim(img_index)
+    st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
 
     # predict chosen image
 
@@ -106,7 +105,7 @@ if selected_img_number:
 
     # predicted_class = prediction['The sample cell is']
 
-    predicted_class = predict(selected_img_number[-1])
+    predicted_class = predict(img)
 
     if predicted_class == 0:
         st.write('Healthy')
@@ -130,16 +129,8 @@ if uploaded_file is not None:
     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
 
-
     # predict uploaded image
-
-    u = np.resize((image_u), (450, 450, 3))
-    resized_u = np.array(u)
-
-    X_pred = np.expand_dims(resized_u, 0)
-    y_pred = model.predict(np.array(X_pred))
-
-    predicted_class_u = (y_pred > 0.5).astype(int)
+    predicted_class_u = predict(image_u)
 
     if predicted_class_u == 0:
         st.write('Healthy')

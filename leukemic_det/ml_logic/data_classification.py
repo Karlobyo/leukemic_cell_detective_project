@@ -30,24 +30,18 @@ def show_img_prelim(img_sample : int):
     return test_imgs
 
 
-def predict(img_sample : int):
+def predict(X_pred):
     """
     Makes a single image prediction
-    Assumes `img_sample' is provided as an integer index by the user
+    Returns 0 for healthy and 1 for malignant
     """
 
-    im = show_img_prelim(img_sample)
+    resized = np.resize((X_pred), (450, 450, 3))
 
-    u = np.resize((im), (450, 450, 3))
-    resized_u = np.array(u)
-
-    X_pred = np.expand_dims(resized_u, 0)
+    X_pred = np.expand_dims(resized, 0)
 
     y_pred = model.predict(np.array(X_pred))
 
-    predicted_class_u = (y_pred > 0.5).astype(int)
+    predicted_class = (y_pred > 0.5).astype(int)
 
-    if predicted_class_u == 0:
-        return {"The sample cell is":'Healthy'}
-    else:
-        return {"The sample cell is":'Malignant'}
+    return predicted_class
