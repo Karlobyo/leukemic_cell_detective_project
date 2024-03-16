@@ -1,21 +1,23 @@
 
-import cv2 as cv
 import streamlit as st
-import numpy as np
-import base64
-from fastapi import FastAPI
-from google.cloud import storage
-import tensorflow
-import requests
 
-from leukemic_det.params import *
+import base64
+import cv2 as cv
+
+import numpy as np
+import tensorflow
+
+import requests
+from fastapi import FastAPI
+
+from google.cloud import storage
 
 # Create a client object using the credentials file
 client = storage.Client()
-bucket = client.bucket(BUCKET_NAME)
+bucket = client.bucket("leukemic-1")
 
 model = tensorflow.keras.models.load_model(
-    "model_dir/20240312-114546.h5")
+    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -47,7 +49,7 @@ h2 {color: black;
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-add_bg_from_local('images/lympho.png')
+add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 
 st.title('Leukemic Cell Detective')
 
@@ -194,7 +196,7 @@ if uploaded_file is not None:
     resized_u = np.array(u)
 
     X_pred = np.expand_dims(resized_u, 0)
-    y_pred = predict(np.array(X_pred))
+    y_pred = model.predict(np.array(X_pred))
 
     predicted_class_u = (y_pred > 0.5).astype(int)
 
