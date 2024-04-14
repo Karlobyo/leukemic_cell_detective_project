@@ -13,7 +13,7 @@ from google.cloud import storage
 client = storage.Client()
 bucket = client.bucket("leukemic-1")
 
-# load the model if the docker image url is not running
+# model for classifying uploaded image (when there is no active Google Cloud Run URL)
 model = tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 

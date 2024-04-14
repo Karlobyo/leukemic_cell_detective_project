@@ -16,7 +16,7 @@ from google.cloud import storage
 client = storage.Client()
 bucket = client.bucket("leukemic-1")
 
-# model for classifying uploaded image (TEMPORARY: as long as I don't implement the relative api endpoint)
+# model for classifying uploaded image (when there is no active Google Cloud Run URL)
 model = tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
