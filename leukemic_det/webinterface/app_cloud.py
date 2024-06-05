@@ -29,8 +29,8 @@ model = load_model()
 ### functions ###
 
 # display image
-@st.cache_resource
-def show_img_prelim(img_sample : int):
+@st.cache_data
+def show_img_(img_sample : int):
 
     # getting bucket paths of test images
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
@@ -40,14 +40,12 @@ def show_img_prelim(img_sample : int):
         test_image_paths.append(image_path)
 
     # deconding the imgs paths into images
-    test_imgs =[]
     blob = bucket.blob(test_image_paths[img_sample])
     image_bytes = blob.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    test_imgs.append(test_img)
+    chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
-    return test_imgs
+    return chosen_img
 
 # classify image
 def predict(X_pred):
