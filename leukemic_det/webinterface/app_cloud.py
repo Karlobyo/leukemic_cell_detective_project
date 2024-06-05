@@ -105,7 +105,7 @@ add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 st.title('Leukemic Cell Detective')
 
 
-st.markdown('### *Detecting healthy vs malignant cells from human white blood cells microscopic images*')
+st.markdown('### *Detecting malignant vs healthy human white blood cells from microscopic images*')
 
 st.markdown('')
 
@@ -183,8 +183,3 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
-
-
-
-if __name__ == "__main__":
-    show_img(3)
