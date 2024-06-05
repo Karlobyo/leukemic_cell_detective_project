@@ -29,7 +29,7 @@ model = load_model()
 ### functions ###
 
 
-# getting bucket paths of test images
+# getting paths of test images
 @st.cache_data
 def get_imgs_paths():
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
@@ -40,7 +40,7 @@ def get_imgs_paths():
     return imgs_paths
 
 
-# display image
+# display chosen image
 @st.cache_data
 def show_img(img_sample : int):
 
