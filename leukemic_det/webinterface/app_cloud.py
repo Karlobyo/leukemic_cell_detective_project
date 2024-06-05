@@ -43,7 +43,7 @@ def get_imgs_paths():
 
 
 # display chosen image
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def show_img(img_sample : int):
 
     imgs_paths = get_imgs_paths()
