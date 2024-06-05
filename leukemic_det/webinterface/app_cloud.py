@@ -33,11 +33,11 @@ model = load_model()
 @st.cache_data
 def get_imgs_paths():
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    image_paths = []
+    imgs_paths = []
     for blob in bucket.list_blobs(prefix=test_folder.name):
         blob_image_paths = blob.name
-        image_paths.append(blob_image_paths)
-    return image_paths
+        imgs_paths.append(blob_image_paths)
+    return imgs_paths
 
 
 # display image
@@ -46,7 +46,7 @@ def show_img(img_sample : int):
 
     imgs_paths = get_imgs_paths()
 
-    # deconding the imgs paths into images
+    # decoding the img path
     img_path = bucket.blob(imgs_paths[img_sample])
     image_bytes = img_path.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
