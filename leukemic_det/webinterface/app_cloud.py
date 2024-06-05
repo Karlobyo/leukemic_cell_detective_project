@@ -28,31 +28,26 @@ model = load_model()
 
 ### functions ###
 
+
+# getting bucket paths of test images
+@st.cache_data
+def get_imgs_paths():
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        blob_image_paths = blob.name
+        image_paths.append(blob_image_paths)
+    return image_paths
+
+
 # display image
 @st.cache_data
 def show_img(img_sample : int):
 
-    # getting bucket paths of test images
-    # test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    # test_image_paths = []
-    # for blob in bucket.list_blobs(prefix=test_folder.name):
-    #     image_paths = blob.name
-    #     test_image_paths.append(image_paths)
-    # print(test_image_paths)
-
-
-
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    blob_iterator = bucket.list_blobs(prefix=test_folder.name)
-
-    # Retrieve the path of the specific image based on img_sample index
-    for idx, blob in enumerate(blob_iterator):
-        if idx == img_sample:
-            img_path_blob = blob.name
-
+    imgs_paths = get_imgs_paths()
 
     # deconding the imgs paths into images
-    img_path = bucket.blob(img_path_blob)
+    img_path = bucket.blob(imgs_paths[img_sample])
     image_bytes = img_path.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
     chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
