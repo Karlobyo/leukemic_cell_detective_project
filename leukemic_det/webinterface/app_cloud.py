@@ -9,14 +9,22 @@ import tensorflow as tf
 from google.cloud import storage
 
 
+
 # Create a client object
 client = storage.Client()
 bucket = client.bucket("leukemic-1")
 
+
+st.set_page_config(layout='wide')
+
+
 # model for classifying uploaded image (when there is no active Google Cloud Run URL)
-model = tf.keras.models.load_model(
+@st.cache_resource
+def load_model():
+    tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
+model = load_model()
 
 ### functions ###
 
@@ -71,7 +79,6 @@ def add_bg_from_local(image_file):
     )
 
 
-st.set_page_config(layout='wide')
 
 CSS = """
 h1 {
