@@ -10,6 +10,7 @@ bucket = client.bucket("leukemic-1")
 model = tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
+
 def show_img_prelim(img_sample : int):
 
     # getting bucket paths of test images

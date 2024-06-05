@@ -20,9 +20,20 @@ from leukemic_det.ml_logic.data_classification import show_img_prelim, predict
 client = storage.Client()
 bucket = client.bucket("leukemic-1")
 
-model = tensorflow.keras.models.load_model(
+
+st.set_page_config(layout='wide')
+
+
+
+@st.cache_resource
+def load_model():
+    return tensorflow.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
+model = load_model()
+
+
+@st.cache_data
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -39,7 +50,6 @@ def add_bg_from_local(image_file):
     )
 
 
-st.set_page_config(layout='wide')
 
 CSS = """
 h1 {
