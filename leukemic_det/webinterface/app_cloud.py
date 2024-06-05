@@ -29,6 +29,7 @@ model = load_model()
 ### functions ###
 
 # display image
+@st.cache_data
 def show_img_prelim(img_sample : int):
 
     # getting bucket paths of test images
@@ -63,6 +64,7 @@ def predict(X_pred):
 
 
 # add bg image
+@st.cache_data
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
