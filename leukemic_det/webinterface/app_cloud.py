@@ -9,36 +9,51 @@ import tensorflow as tf
 from google.cloud import storage
 
 
+
 # Create a client object
 client = storage.Client()
 bucket = client.bucket("leukemic-1")
 
-# load the model if the docker image url is not running
-model = tf.keras.models.load_model(
+
+st.set_page_config(layout='wide')
+
+
+# model for classifying uploaded image (when there is no active Google Cloud Run URL)
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
+model = load_model()
 
 ### functions ###
 
-# display image
-def show_img_prelim(img_sample : int):
 
-    # getting bucket paths of test images
+# getting paths of test images
+@st.cache_data
+def get_imgs_paths():
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
+    imgs_paths = []
     for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
+        blob_image_paths = blob.name
+        imgs_paths.append(blob_image_paths)
+    return imgs_paths
 
-    # deconding the imgs paths into images
-    test_imgs =[]
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
+
+# display chosen image
+@st.cache_data
+def show_img(img_sample : int):
+
+    imgs_paths = get_imgs_paths()
+
+    # decoding the img path
+    img_path = bucket.blob(imgs_paths[img_sample])
+    image_bytes = img_path.download_as_bytes()
     nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    test_imgs.append(test_img)
+    chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
-    return test_imgs
+    return chosen_img
+
 
 # classify image
 def predict(X_pred):
@@ -55,6 +70,7 @@ def predict(X_pred):
 
 
 # add bg image
+@st.cache_data
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -71,7 +87,6 @@ def add_bg_from_local(image_file):
     )
 
 
-st.set_page_config(layout='wide')
 
 CSS = """
 h1 {
@@ -121,7 +136,7 @@ selected_img_number = st.multiselect('', img_number)
 
 if selected_img_number:
     img_index = selected_img_number[-1]
-    img = show_img_prelim(img_index)
+    img = show_img(img_index)
 
     # display selected image
     st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
@@ -169,3 +184,8 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
+
+
+
+if __name__ == "__main__":
+    show_img(3)
