@@ -21,7 +21,7 @@ st.set_page_config(layout='wide')
 # model for classifying uploaded image (when there is no active Google Cloud Run URL)
 @st.cache_resource
 def load_model():
-    tf.keras.models.load_model(
+    return tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
 model = load_model()
