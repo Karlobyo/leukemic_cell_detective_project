@@ -30,7 +30,7 @@ model = load_model()
 
 # display image
 @st.cache_data
-def show_img_(img_sample : int):
+def show_img(img_sample : int):
 
     # getting bucket paths of test images
     test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
@@ -128,7 +128,7 @@ selected_img_number = st.multiselect('', img_number)
 
 if selected_img_number:
     img_index = selected_img_number[-1]
-    img = show_img_prelim(img_index)
+    img = show_img(img_index)
 
     # display selected image
     st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
