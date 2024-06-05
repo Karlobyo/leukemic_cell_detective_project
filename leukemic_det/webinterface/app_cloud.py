@@ -8,6 +8,8 @@ import tensorflow as tf
 
 from google.cloud import storage
 
+import logging
+import contextlib
 
 
 # Create a client object
@@ -53,6 +55,19 @@ def show_img(img_sample : int):
     chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
     return chosen_img
+
+
+@contextlib.contextmanager
+def suppress_logging(level=logging.ERROR):
+    logger = logging.getLogger()
+    previous_level = logger.getEffectiveLevel()
+    logger.setLevel(level)
+    try:
+        yield
+    finally:
+        logger.setLevel(previous_level)
+
+
 
 
 # classify image
@@ -136,7 +151,9 @@ selected_img_number = st.multiselect('', img_number)
 
 if selected_img_number:
     img_index = selected_img_number[-1]
-    img = show_img(img_index)
+    with suppress_logging():
+
+        img = show_img(img_index)
 
     # display selected image
     st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
@@ -184,4 +201,3 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
-
