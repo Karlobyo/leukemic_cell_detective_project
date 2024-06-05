@@ -135,11 +135,11 @@ selected_img_number = st.selectbox('', img_number)
 
 
 if selected_img_number:
-    img_index = selected_img_number[-1]
-    img = show_img(img_index)
+    #img_index = selected_img_number[-1]
+    img = show_img(selected_img_number)
 
     # display selected image
-    st.image(img, width=200, caption=f'Human white blood cell #{img_index}')
+    st.image(img, width=200, caption=f'Human white blood cell #{selected_img_number}')
 
     # classify selected image
     predicted_class = predict(img)
