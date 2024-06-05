@@ -135,7 +135,6 @@ selected_img_number = st.selectbox('', img_number)
 
 
 if selected_img_number:
-    #img_index = selected_img_number[-1]
     img = show_img(selected_img_number)
 
     # display selected image
