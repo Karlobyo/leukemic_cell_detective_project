@@ -29,7 +29,7 @@ model = load_model()
 ### functions ###
 
 # display image
-@st.cache_data
+@st.cache_resource
 def show_img_prelim(img_sample : int):
 
     # getting bucket paths of test images
