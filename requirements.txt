@@ -1,17 +1,23 @@
-streamlit
+streamlit==1.35.0
+#wheel
 
-wheel
-yapf
-pyarrow
+yapf==0.40.2
 
-fastapi
+pyarrow==16.1.0
+
+
+fastapi==0.111.0
+fastapi-cli==0.0.4
+
 numpy==1.26.4
 
-tensorflow
+tensorflow==2.16.1
+tensorflow-io-gcs-filesystem==0.37.0
+
 opencv-python-headless==4.9.0.80
 
 
 # 4.9.0.80
 
-google-cloud-bigquery
-google-cloud-storage
+google-cloud-bigquery==3.24.0
+google-cloud-storage==2.16.0
