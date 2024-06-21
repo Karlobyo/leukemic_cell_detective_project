@@ -5,7 +5,7 @@ yapf
 pyarrow
 
 fastapi
-numpy==1.26.4
+numpy
 
 tensorflow
 opencv-python-headless
