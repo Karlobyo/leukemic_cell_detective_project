@@ -134,7 +134,7 @@ st.markdown('')
 st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
-selected_img_number = st.selectbox('', img_number)
+selected_img_number = st.selectbox('', img_number, index=None)
 
 
 if selected_img_number:
