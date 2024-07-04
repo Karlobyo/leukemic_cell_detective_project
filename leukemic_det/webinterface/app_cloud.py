@@ -123,7 +123,7 @@ st.markdown('Dataset publication: Gupta, A., & Gupta, R. (2019). ALL Challenge d
 
 st.markdown('')
 
-st.markdown('This is a research preview of a convolution neural network deep learning app meant to deliver real-time predictions classifiying   \nhuman white blood cells microscopic images as healthy or malignant (acute lymphoblastic leukaemia)')
+st.markdown('This is a research preview of a convolution neural network deep learning app delivering real-time predictions classifiying   \nhuman white blood cells microscopic images as healthy or malignant (acute lymphoblastic leukaemia)')
 
 st.markdown('***')
 
