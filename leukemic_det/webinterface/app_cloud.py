@@ -7,12 +7,18 @@ import numpy as np
 import tensorflow as tf
 
 from google.cloud import storage
+from google.oauth2 import service_account
 
 
-credentials=st.secrets["credentials"]
+# Retrieve the secrets
+service_account_info = st.secrets["gcp_service_account"]
 
-# Create a client object
-client = storage.Client(credentials=credentials, project="le-wagon-1-369318")
+# Create credentials object from the secrets
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+# Initialize the client with the credentials
+client = storage.Client(credentials=credentials, project=service_account_info["project_id"])
+
 bucket = client.bucket("leukemic-1")
 
 
