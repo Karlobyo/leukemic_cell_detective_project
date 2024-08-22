@@ -13,7 +13,7 @@ import contextlib
 
 
 # Create a client object
-client = storage.Client()
+client = storage.Client(project="leukemic-1")
 bucket = client.bucket("leukemic-1")
 
 
