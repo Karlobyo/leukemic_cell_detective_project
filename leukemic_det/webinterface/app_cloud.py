@@ -9,8 +9,10 @@ import tensorflow as tf
 from google.cloud import storage
 
 
+credentials=st.secrets("credentials")
+
 # Create a client object
-client = storage.Client("le-wagon-1-369318")
+client = storage.Client(credentials=credentials"le-wagon-1-369318")
 bucket = client.bucket("leukemic-1")
 
 
