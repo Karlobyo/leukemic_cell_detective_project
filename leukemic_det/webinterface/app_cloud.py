@@ -10,7 +10,7 @@ from google.cloud import storage
 
 
 # Create a client object
-client = storage.Client(project="le-wagon-1-369318")
+client = storage.Client()
 bucket = client.bucket("leukemic-1")
 
 
