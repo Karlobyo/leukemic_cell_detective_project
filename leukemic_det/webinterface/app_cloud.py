@@ -8,12 +8,9 @@ import tensorflow as tf
 
 from google.cloud import storage
 
-import logging
-import contextlib
-
 
 # Create a client object
-client = storage.Client(project="leukemic-1")
+client = storage.Client(project="le-wagon-1-369318")
 bucket = client.bucket("leukemic-1")
 
 
