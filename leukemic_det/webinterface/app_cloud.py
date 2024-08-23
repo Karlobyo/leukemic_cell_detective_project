@@ -24,7 +24,7 @@ bucket = st.secrets["bucket"]
 
 # Initialize the client with the credentials
 
-client = storage.Client(credentials=credentials, project=service_account_info["project_id"])
+client = storage.Client(project=service_account_info["project_id"], credentials=credentials)
 
 bucket = client.bucket(bucket)
 
