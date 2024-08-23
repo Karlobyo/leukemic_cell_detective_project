@@ -20,9 +20,9 @@ from google.cloud import storage
 
 # Initialize the client with the credentials
 proejct_id=st.secrets["project_id"]
+credentials = st.secrets["private_key"]
 
-
-client = storage.Client(project=proejct_id)#credentials=credentials, project=service_account_info["project_id"])
+client = storage.Client(project=proejct_id, credentials=credentials)#credentials=credentials, project=service_account_info["project_id"])
 
 bucket = client.bucket("leukemic-1")
 
