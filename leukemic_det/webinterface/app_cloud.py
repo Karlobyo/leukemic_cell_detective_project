@@ -14,17 +14,16 @@ from google.oauth2 import service_account
 service_account_info = st.secrets["gcp_service_account"]
 
 # Create credentials object from the secrets
-#credentials = service_account.Credentials.from_service_account_info(service_account_info)
-credentials = service_account_info["private_key"]
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+#credentials = service_account_info["private_key"]
 
+bucket = st.secrets["bucket"]
 
 # Initialize the client with the credentials
-proejct_id=st.secrets["project_id"]
-#credentials = st.secrets["private_key"]
 
-client = storage.Client(project=proejct_id, credentials=credentials)#credentials=credentials, project=service_account_info["project_id"])
+client = storage.Client(credentials=credentials, project=service_account_info["project_id"])
 
-bucket = client.bucket("leukemic-1")
+bucket = client.bucket(bucket)
 
 
 st.set_page_config(layout='wide')
