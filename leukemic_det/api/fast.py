@@ -73,3 +73,8 @@ async def classify(image: UploadFile=File(...)): # async funcs allow processes t
         return {"The sample cell is":'Healthy'}
     else:
         return {"The sample cell is":'Malignant'}
+
+
+
+if __name__=='__main__':
+    predict(4)
