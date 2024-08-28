@@ -6,6 +6,7 @@
 # Ada Library Information
 *.ali
 
+.streamlit/secrets.toml
 
 .python-version
 

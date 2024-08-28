@@ -9,6 +9,8 @@ import tensorflow as tf
 from google.cloud import storage
 from google.oauth2 import service_account
 from google import auth
+from google.oauth2 import service_account
+
 
 # Retrieve the secrets
 service_account_info = st.secrets["gcp_service_account"]
@@ -18,7 +20,6 @@ credentials = service_account.Credentials.from_service_account_info(service_acco
 #credentials = service_account_info["private_key"]
 
 #credentials, project = auth.default()
-
 
 bucket = st.secrets["bucket"]
 

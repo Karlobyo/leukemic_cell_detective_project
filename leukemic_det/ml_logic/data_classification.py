@@ -2,10 +2,26 @@ import numpy as np
 import cv2 as cv
 import tensorflow as tf
 from google.cloud import storage
+import streamlit as st
+from google.oauth2 import service_account
+
 
 # Create a client object using the credentials file
-client = storage.Client()
-bucket = client.bucket("leukemic-1")
+service_account_info = st.secrets["gcp_service_account"]
+
+# Create credentials object from the secrets
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+#credentials = service_account_info["private_key"]
+
+#credentials, project = auth.default()
+
+bucket = st.secrets["bucket"]
+
+# Initialize the client with the credentials
+
+client = storage.Client(project=service_account_info["project_id"], credentials=credentials)
+
+bucket = client.bucket(bucket)
 
 model = tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
