@@ -140,38 +140,31 @@ st.markdown('')
 
 st.markdown('Or upload an image from your browser:')
 
-uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
+# uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
 
-if uploaded_file is not None:
+# if uploaded_file is not None:
 
-    # decode
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+#     # decode
+#     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+#     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
 
-    # display uploaded image
-    st.image(image_u, width=200, channels="BGR", caption='uploaded image')
+#     # display uploaded image
+#     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
 
-    # classify uploaded image
-    predicted_class_u = predict(image_u)
+#     # classify uploaded image
+#     predicted_class_u = predict(image_u)
 
-    if predicted_class_u == 0:
-        st.write('Healthy')
-    else:
-        st.write('Malignant')
+#     if predicted_class_u == 0:
+#         st.write('Healthy')
+#     else:
+#         st.write('Malignant')
 
 
 st.markdown('')
 
 st.markdown('')
 
-st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
 
-
-
-st.markdown("here you can test the post api")
-
-
-# predict chosen image
 
 # use post api
 leukemic_api_url = f'{URL}/classify'
@@ -180,8 +173,7 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 
 if uploaded_file is not None:
     # Display the uploaded image
-    st.image(uploaded_file, caption='Uploaded Image.', use_column_width=True)
-    st.write("Classifying...")
+    st.image(uploaded_file, caption='Uploaded Image.')
 
     # Send the image to the FastAPI endpoint
     files = {"image": uploaded_file.getvalue()}  # `uploaded_file.getvalue()` returns bytes
@@ -206,3 +198,6 @@ if uploaded_file is not None:
             st.write(f"Error: {response.status_code}")
     except requests.exceptions.RequestException as e:
         st.write(f"Request failed: {e}")
+
+
+st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
