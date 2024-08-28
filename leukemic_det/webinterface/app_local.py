@@ -18,6 +18,9 @@ from google.oauth2 import service_account
 from leukemic_det.ml_logic.data_classification import show_img_prelim, predict
 
 
+URL = "http://127.0.0.1:8000"
+
+
 # Create a client object using the credentials file
 # Retrieve the secrets
 #service_account_info = st.secrets["gcp_service_account"]
@@ -112,15 +115,15 @@ if selected_img_number:
     # predict chosen image
 
     # use api
-    # leukemic_api_url = f'{URL}/predict'
-    # params = {'img_sample':selected_img_number[-1]}
-    # response = requests.get(leukemic_api_url, params=params)
+    leukemic_api_url = f'{URL}/predict'
+    params = {'img_sample':selected_img_number[-1]}
+    response = requests.get(leukemic_api_url, params=params)
 
-    # prediction = response.json()
+    prediction = response.json()
 
-    # predicted_class = prediction['The sample cell is']
+    predicted_class = prediction['The sample cell is']
 
-    predicted_class = predict(img)
+    #predicted_class = predict(img)
 
     if predicted_class == 0:
         st.write('Healthy')
@@ -162,3 +165,44 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
+
+
+
+st.markdown("here you can test the post api")
+
+
+# predict chosen image
+
+# use post api
+leukemic_api_url = f'{URL}/classify'
+
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png", "bmp"])
+
+if uploaded_file is not None:
+    # Display the uploaded image
+    st.image(uploaded_file, caption='Uploaded Image.', use_column_width=True)
+    st.write("Classifying...")
+
+    # Send the image to the FastAPI endpoint
+    files = {"image": uploaded_file.getvalue()}  # `uploaded_file.getvalue()` returns bytes
+
+    try:
+        response = requests.post(leukemic_api_url, files=files)
+
+        if response.status_code == 200:
+
+            prediction = response.json()
+
+            predicted_class = prediction['The sample cell is']
+
+            #predicted_class = predict(img)
+
+            if predicted_class == 0:
+                st.write('Healthy')
+            else:
+                st.write('Malignant')
+
+        else:
+            st.write(f"Error: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        st.write(f"Request failed: {e}")
