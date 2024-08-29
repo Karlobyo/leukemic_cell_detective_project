@@ -116,9 +116,9 @@ if selected_img_number:
     # predict chosen image
 
     # use api
-    leukemic_api_url = f'{URL}/predict'
+    predict_api_url = f'{URL}/predict'
     params = {'img_sample':selected_img_number[-1]}
-    response = requests.get(leukemic_api_url, params=params)
+    response = requests.get(predict_api_url, params=params)
 
     prediction = response.json()
 
@@ -151,7 +151,7 @@ st.markdown('')
 
 
 # use post api
-leukemic_api_url = f'{URL}/classify'
+classify_api_url = f'{URL}/classify'
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png", "bmp"])
 
@@ -163,7 +163,7 @@ if uploaded_file is not None:
     files = {"image": uploaded_file.getvalue()}  # `uploaded_file.getvalue()` returns bytes
 
     try:
-        response = requests.post(leukemic_api_url, files=files)
+        response = requests.post(classify_api_url, files=files)
 
         if response.status_code == 200:
 
