@@ -17,7 +17,7 @@ run_api:
 # local streamlit
 
 streamlit:
-	@streamlit run leukemic_det/webinterface/app_local.py
+	@streamlit run leukemic_det/webinterface/Intro.py
 
 
 clean:
