@@ -10,9 +10,22 @@ from google.cloud import storage
 
 
 
-# Create a client object
-client = storage.Client()
-bucket = client.bucket("leukemic-1")
+# Retrieve the secrets
+service_account_info = st.secrets["gcp_service_account"]
+
+# Create credentials object from the secrets
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+#credentials = service_account_info["private_key"]
+
+#credentials, project = auth.default()
+
+bucket = st.secrets["bucket"]
+
+# Initialize the client with the credentials
+
+client = storage.Client(project=service_account_info["project_id"], credentials=credentials)
+
+bucket = client.bucket(bucket)
 
 
 st.set_page_config(layout='wide')
