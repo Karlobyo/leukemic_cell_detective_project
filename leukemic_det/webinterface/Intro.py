@@ -30,7 +30,7 @@ st.markdown(
 """
 This is a research preview of a convolution neural network deep learning app\n
 meant to deliver real-time predictions classifiying
-human white blood cells microscopic images as healthy or malignant
+human white blood cells microscopic images as healthy or malignant\n
 (acute lymphoblastic leukaemia)
 """)
 
