@@ -1,6 +1,6 @@
 import numpy as np
 import cv2 as cv
-import tensorflow as tf
+#import tensorflow as tf
 from google.cloud import storage
 import streamlit as st
 from google.oauth2 import service_account
@@ -23,8 +23,8 @@ client = storage.Client(project=service_account_info["project_id"], credentials=
 
 bucket = client.bucket(bucket)
 
-model = tf.keras.models.load_model(
-    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
+#model = tf.keras.models.load_model(
+#    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
 def show_img_prelim(img_sample : int):
 
@@ -46,18 +46,18 @@ def show_img_prelim(img_sample : int):
     return test_imgs
 
 
-def predict(X_pred):
-    """
-    Makes a single image prediction
-    Returns 0 for healthy and 1 for malignant
-    """
+# def predict(X_pred):
+#     """
+#     Makes a single image prediction
+#     Returns 0 for healthy and 1 for malignant
+#     """
 
-    resized = np.resize((X_pred), (450, 450, 3))
+#     resized = np.resize((X_pred), (450, 450, 3))
 
-    X_pred = np.expand_dims(resized, 0)
+#     X_pred = np.expand_dims(resized, 0)
 
-    y_pred = model.predict(np.array(X_pred))
+#     y_pred = model.predict(np.array(X_pred))
 
-    predicted_class = (y_pred > 0.5).astype(int)
+#     predicted_class = (y_pred > 0.5).astype(int)
 
-    return predicted_class
+#     return predicted_class
