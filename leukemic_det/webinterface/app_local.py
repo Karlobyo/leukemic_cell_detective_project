@@ -107,6 +107,7 @@ selected_img_number = st.multiselect('', img_number)
 
 
 
+
 if selected_img_number:
     img_index = selected_img_number[-1]
     img = show_img_prelim(img_index)
@@ -131,6 +132,8 @@ if selected_img_number:
         st.write('Malignant')
 
 
+
+
 # image uploader
 st.markdown('')
 
@@ -139,25 +142,6 @@ st.markdown('***')
 st.markdown('')
 
 st.markdown('Or upload an image from your browser:')
-
-# uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
-
-# if uploaded_file is not None:
-
-#     # decode
-#     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-#     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
-
-#     # display uploaded image
-#     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
-
-#     # classify uploaded image
-#     predicted_class_u = predict(image_u)
-
-#     if predicted_class_u == 0:
-#         st.write('Healthy')
-#     else:
-#         st.write('Malignant')
 
 
 st.markdown('')
@@ -173,7 +157,7 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 
 if uploaded_file is not None:
     # Display the uploaded image
-    st.image(uploaded_file, caption='Uploaded Image.', width=244)
+    st.image(uploaded_file, caption='Uploaded Image', width=240)
 
     # Send the image to the FastAPI endpoint
     files = {"image": uploaded_file.getvalue()}  # `uploaded_file.getvalue()` returns bytes
