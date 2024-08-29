@@ -2,20 +2,17 @@
 import streamlit as st
 
 import base64
-import cv2 as cv
 
-import numpy as np
 import tensorflow
 
 import requests
-from fastapi import FastAPI
 
 from google.cloud import storage
 from google.oauth2 import service_account
 
 
 # functions
-from leukemic_det.ml_logic.data_classification import show_img_prelim, predict
+from leukemic_det.ml_logic.data_classification import show_img_prelim
 
 
 URL = "http://127.0.0.1:8000"
@@ -31,7 +28,7 @@ URL = "http://127.0.0.1:8000"
 
 #credentials, project = auth.default()
 
-bucket = st.secrets["bucket"]
+bucket = st.secrets["bucket"] # this comes from the toml file in the root directory
 
 # Initialize the client with the credentials
 
