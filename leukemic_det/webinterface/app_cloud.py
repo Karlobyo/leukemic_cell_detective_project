@@ -8,8 +8,7 @@ import tensorflow as tf
 
 from google.cloud import storage
 from google.oauth2 import service_account
-from google import auth
-from google.oauth2 import service_account
+
 
 
 # Retrieve the secrets
