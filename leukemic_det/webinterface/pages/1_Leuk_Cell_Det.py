@@ -1,6 +1,5 @@
 import streamlit as st
 
-import base64
 import cv2 as cv
 
 import numpy as np
