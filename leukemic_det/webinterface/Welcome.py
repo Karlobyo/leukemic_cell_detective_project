@@ -3,7 +3,7 @@ from bg_loader import add_bg_from_local
 
 
 st.set_page_config(
-    page_title="Intro",
+    page_title="Welcome",
     #page_icon="👋",
     layout='wide'
 )
