@@ -39,7 +39,12 @@ st.markdown('')
 st.markdown(
 """
 Original dataset: https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=52758223
+""")
 
+st.markdown('')
+
+
+st.markdown("""
 Dataset publication: Gupta, A., & Gupta, R. (2019). ALL Challenge dataset of ISBI 2019 [Data set]\n
 The Cancer Imaging Archive https://doi.org/10.7937/tcia.2019.dc64i46r
 """)
