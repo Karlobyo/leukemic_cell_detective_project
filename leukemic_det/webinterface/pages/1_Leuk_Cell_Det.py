@@ -1,9 +1,5 @@
 
 import streamlit as st
-import numpy as np
-import cv2 as cv
-
-import base64
 
 #import tensorflow
 
@@ -14,29 +10,8 @@ from google.oauth2 import service_account
 
 
 # functions
-#from leukemic_det.ml_logic.data_classification import show_img_prelim
-
-# temporary
-def show_img_prelim(img_sample : int):
-
-    # getting bucket paths of test images
-    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
-    test_image_paths = []
-    for blob in bucket.list_blobs(prefix=test_folder.name):
-        image_path = blob.name
-        test_image_paths.append(image_path)
-
-    # deconding the imgs paths into images
-    test_imgs =[]
-    blob = bucket.blob(test_image_paths[img_sample])
-    image_bytes = blob.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    test_imgs.append(test_img)
-
-    return test_imgs
-
-
+from leukemic_det.ml_logic.data_classification import show_img_prelim
+from leukemic_det.webinterface.bg_loader import add_bg_from_local
 
 
 
@@ -63,20 +38,6 @@ bucket = client.bucket(bucket)
 #model = tensorflow.keras.models.load_model(
 #    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-    st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url(data:image/{"jpg"};base64,{encoded_string.decode()});
-        background-size: cover
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-    )
 
 
 st.set_page_config(layout='wide')
@@ -95,6 +56,7 @@ st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
 
 add_bg_from_local('/Users/carlobarbini/code/Karlobyo/leukemic_cell_det_project/leukemic_cell_detective_project/leukemic_det/webinterface/images/lympho.png')
+
 
 st.title('Leukemic Cell Detective')
 
@@ -117,7 +79,6 @@ st.markdown('Please select an image to be classified (1800 available):')
 
 img_number = [k for k in list(range(1, 1801))]
 selected_img_number = st.multiselect('', img_number)
-
 
 
 
@@ -195,6 +156,13 @@ if uploaded_file is not None:
             st.write(f"Error: {response.status_code}")
     except requests.exceptions.RequestException as e:
         st.write(f"Request failed: {e}")
+
+
+st.markdown('')
+
+st.markdown('')
+
+st.markdown('')
 
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
