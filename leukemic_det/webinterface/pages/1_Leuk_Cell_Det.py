@@ -120,7 +120,7 @@ add_bg_from_local('leukemic_det/webinterface/images/lympho.png')
 st.title('Leukemic Cell Detective')
 
 
-st.markdown("""### *Detecting healthy vs malignant cells*\n ### *from human white blood cells microscopic images*""")
+st.markdown("""### *Detecting healthy vs malignant cells from human white blood cells microscopic images*""")
 
 st.markdown('')
 
