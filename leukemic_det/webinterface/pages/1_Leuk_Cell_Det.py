@@ -129,19 +129,6 @@ st.markdown('***')
 st.markdown('')
 
 
-st.markdown('Original dataset: https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=52758223')
-
-st.markdown('Dataset publication: Gupta, A., & Gupta, R. (2019). ALL Challenge dataset of ISBI 2019 [Data set]   \nThe Cancer Imaging Archive https://doi.org/10.7937/tcia.2019.dc64i46r')
-
-st.markdown('')
-
-st.markdown('This is a research preview of a convolution neural network deep learning app delivering real-time predictions classifiying   \nhuman white blood cells microscopic images as healthy or malignant (acute lymphoblastic leukaemia)')
-
-st.markdown('***')
-
-st.markdown('')
-
-
 # create multiselect widget for choosing an image
 st.markdown('Please select an image to be classified (1800 available):')
 
