@@ -1,5 +1,4 @@
 import streamlit as st
-import base64
 from leukemic_det.webinterface.bg_loader import add_bg_from_local
 
 st.set_page_config(
