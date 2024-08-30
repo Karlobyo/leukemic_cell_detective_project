@@ -28,7 +28,7 @@ st.set_page_config(layout='wide')
 
 
 # local model for classifying uploaded image (when there is no active Google Cloud Run URL)
-model = load_model()
+#model = load_model()
 
 
 CSS = """
