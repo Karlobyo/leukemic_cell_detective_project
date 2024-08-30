@@ -5,6 +5,9 @@ from google.cloud import storage
 import streamlit as st
 from google.oauth2 import service_account
 
+from leukemic_det.ml_logic.registry import load_model
+
+
 
 # Create a client object using the credentials file
 service_account_info = st.secrets["gcp_service_account"]
@@ -23,9 +26,10 @@ client = storage.Client(project=service_account_info["project_id"], credentials=
 
 bucket = client.bucket(bucket)
 
-model = tf.keras.models.load_model(
-    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
+#model = tf.keras.models.load_model(
+#    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
+model = load_model()
 
 
 @st.cache_data(show_spinner=False)
