@@ -8,8 +8,8 @@ from google.cloud import storage
 from google.oauth2 import service_account
 
 from bg_loader import add_bg_from_local
-from leukemic_det.ml_logic.data_classification import show_img, predict
-
+#from leukemic_det.ml_logic.data_classification import show_img, predict
+from leukemic_det.ml_logic.registry import load_model
 
 # Retrieve the gcp account secrets
 service_account_info = st.secrets["gcp_service_account"]
@@ -21,6 +21,60 @@ bucket = st.secrets["bucket"]
 # Initialize the client with the credentials
 client = storage.Client(project=service_account_info["project_id"], credentials=credentials)
 bucket = client.bucket(bucket)
+
+
+
+# functions if module import dont work
+
+
+@st.cache_data(show_spinner=False)
+def get_imgs_paths():
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    imgs_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        blob_image_paths = blob.name
+        imgs_paths.append(blob_image_paths)
+    return imgs_paths
+
+
+
+@st.cache_data(show_spinner=False)
+def show_img(img_sample : int):
+
+    imgs_paths = get_imgs_paths()
+
+    # decoding the img path
+    img_path = bucket.blob(imgs_paths[img_sample])
+    image_bytes = img_path.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+
+    return chosen_img
+
+
+def predict(X_pred):
+    """
+    Makes a single image prediction
+    Returns 0 for healthy and 1 for malignant
+    """
+
+    resized = np.resize((X_pred), (450, 450, 3))
+
+    X_pred = np.expand_dims(resized, 0)
+
+    model = load_model()
+
+    y_pred = model.predict(np.array(X_pred))
+
+    predicted_class = (y_pred > 0.5).astype(int)
+
+    return predicted_class
+
+
+
+
+
+
 
 
 st.set_page_config(layout='wide')
