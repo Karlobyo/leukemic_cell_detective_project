@@ -107,4 +107,3 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
-
