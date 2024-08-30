@@ -10,7 +10,7 @@ from google.oauth2 import service_account
 
 from bg_loader import add_bg_from_local
 #from leukemic_det.ml_logic.data_classification import show_img, predict
-#from leukemic_det.ml_logic.registry import load_model
+from leukemic_det.ml_logic.registry import load_model
 
 # Retrieve the gcp account secrets
 service_account_info = st.secrets["gcp_service_account"]
@@ -53,10 +53,10 @@ def show_img(img_sample : int):
     return chosen_img
 
 
-@st.cache_resource
-def load_model():
-    return tf.keras.models.load_model(
-    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
+# @st.cache_resource
+# def load_model():
+#     return tf.keras.models.load_model(
+#     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
 
 def predict(X_pred):
