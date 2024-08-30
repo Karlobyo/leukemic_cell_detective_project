@@ -24,9 +24,7 @@ client = storage.Client(project=service_account_info["project_id"], credentials=
 bucket = client.bucket(bucket)
 
 
-
 # functions if module import dont work
-
 
 @st.cache_data(show_spinner=False)
 def get_imgs_paths():
