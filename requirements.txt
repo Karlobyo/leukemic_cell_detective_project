@@ -19,3 +19,6 @@ opencv-python-headless==4.9.0.80
 
 google-cloud-bigquery==3.24.0
 google-cloud-storage==2.16.0
+
+
+
