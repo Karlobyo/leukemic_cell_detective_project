@@ -11,6 +11,9 @@ from google.oauth2 import service_account
 from bg_loader import add_bg_from_local
 
 
+from leukemic_det.ml_logic.data_classification import show_img
+
+
 # Retrieve the secrets
 service_account_info = st.secrets["gcp_service_account"]
 
@@ -55,18 +58,18 @@ def get_imgs_paths():
 
 
 # display chosen image
-@st.cache_data(show_spinner=False)
-def show_img(img_sample : int):
+# @st.cache_data(show_spinner=False)
+# def show_img(img_sample : int):
 
-    imgs_paths = get_imgs_paths()
+#     imgs_paths = get_imgs_paths()
 
-    # decoding the img path
-    img_path = bucket.blob(imgs_paths[img_sample])
-    image_bytes = img_path.download_as_bytes()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+#     # decoding the img path
+#     img_path = bucket.blob(imgs_paths[img_sample])
+#     image_bytes = img_path.download_as_bytes()
+#     nparr = np.frombuffer(image_bytes, np.uint8)
+#     chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
-    return chosen_img
+#     return chosen_img
 
 
 

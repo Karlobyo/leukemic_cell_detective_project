@@ -26,6 +26,36 @@ bucket = client.bucket(bucket)
 model = tf.keras.models.load_model(
     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
+
+
+@st.cache_data(show_spinner=False)
+def get_imgs_paths():
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    imgs_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        blob_image_paths = blob.name
+        imgs_paths.append(blob_image_paths)
+    return imgs_paths
+
+
+
+@st.cache_data(show_spinner=False)
+def show_img(img_sample : int):
+
+    imgs_paths = get_imgs_paths()
+
+    # decoding the img path
+    img_path = bucket.blob(imgs_paths[img_sample])
+    image_bytes = img_path.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    chosen_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+
+    return chosen_img
+
+
+
+
+
 def show_img_prelim(img_sample : int):
 
     # getting bucket paths of test images
