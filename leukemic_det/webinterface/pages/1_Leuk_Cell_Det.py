@@ -10,6 +10,7 @@ from google.oauth2 import service_account
 from bg_loader import add_bg_from_local
 from leukemic_det.ml_logic.data_classification import show_img, predict
 
+
 # Retrieve the gcp account secrets
 service_account_info = st.secrets["gcp_service_account"]
 
@@ -107,4 +108,3 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
-
