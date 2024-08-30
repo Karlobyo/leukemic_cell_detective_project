@@ -10,8 +10,7 @@ from google.oauth2 import service_account
 
 from bg_loader import add_bg_from_local
 
-
-from leukemic_det.ml_logic.data_classification import show_img
+from leukemic_det.ml_logic.data_classification import show_img, predict
 
 
 # Retrieve the secrets
@@ -74,16 +73,16 @@ model = load_model()
 
 
 # classify image
-def predict(X_pred):
-    """
-    Makes a single image prediction
-    Returns 0 for healthy and 1 for malignant
-    """
-    resized = np.resize((X_pred), (450, 450, 3))
-    X_pred = np.expand_dims(resized, 0)
-    y_pred = model.predict(X_pred)
-    predicted_class = (y_pred > 0.5).astype(int)
-    return predicted_class
+# def predict(X_pred):
+#     """
+#     Makes a single image prediction
+#     Returns 0 for healthy and 1 for malignant
+#     """
+#     resized = np.resize((X_pred), (450, 450, 3))
+#     X_pred = np.expand_dims(resized, 0)
+#     y_pred = model.predict(X_pred)
+#     predicted_class = (y_pred > 0.5).astype(int)
+#     return predicted_class
 
 
 
