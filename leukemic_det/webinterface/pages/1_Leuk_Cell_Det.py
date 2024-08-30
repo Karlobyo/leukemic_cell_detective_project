@@ -52,6 +52,7 @@ def show_img(img_sample : int):
 
     return chosen_img
 
+
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model(
