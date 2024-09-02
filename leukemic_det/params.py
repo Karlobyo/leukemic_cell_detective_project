@@ -1,6 +1,6 @@
 import os
 
-MODEL_TARGET = "gcs"
+MODEL_TARGET = "local"
 
 BUCKET_NAME = "leukemic-1"
 
