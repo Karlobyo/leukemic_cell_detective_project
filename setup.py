@@ -8,5 +8,5 @@ requirements = [x.strip() for x in content]
 
 setup(name='leukemic_det',
       description="package description",
-      packages=find_packages(include=['leukemic_det', 'leukemic_det.*']),
+      packages=find_packages(),#include=['leukemic_det', 'leukemic_det.*']),
       install_requires=requirements)
