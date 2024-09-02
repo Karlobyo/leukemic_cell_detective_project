@@ -62,7 +62,7 @@ def load_model():
 
             try:
                 latest_blob = max(blobs, key=lambda x: x.updated)
-                latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name)
+                latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name).replace("models/", "")
                 latest_blob.download_to_filename(latest_model_path_to_save)
 
                 latest_model = tf.keras.models.load_model(latest_model_path_to_save)
