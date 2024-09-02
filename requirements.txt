@@ -47,7 +47,7 @@ jsonschema==4.22.0
 jsonschema-specifications==2023.12.1
 keras==3.3.3
 #-e git+ssh://git@github.com/Karlobyo/leukemic_cell_detective_project.git@3f5da3ee0539795d696bc94d70781388ec3ff5a1#egg=leukemic_cell_detective
--e . 
+-e ../leukemic_cell_detective
 libclang==18.1.1
 Markdown==3.6
 markdown-it-py==3.0.0
