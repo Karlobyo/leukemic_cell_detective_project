@@ -8,7 +8,7 @@ from google.cloud import storage
 from google.oauth2 import service_account
 
 import sys
-sys.path.append('leukemic_det')
+sys.path.append('leukemic_dell_detective_project/leukemic_det/')
 
 
 from bg_loader import add_bg_from_local
