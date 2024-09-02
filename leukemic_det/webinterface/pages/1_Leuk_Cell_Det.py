@@ -51,10 +51,10 @@ def show_img(img_sample : int):
     return chosen_img
 
 
-@st.cache_resource
-def load_model():
-    return tf.keras.models.load_model(
-    "leukemic_det/webinterface/model_dir/20240312-114546.h5")
+# @st.cache_resource
+# def load_model():
+#     return tf.keras.models.load_model(
+#     "leukemic_det/webinterface/model_dir/20240312-114546.h5")
 
 
 def predict(X_pred):
