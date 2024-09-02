@@ -7,9 +7,6 @@ import numpy as np
 from google.cloud import storage
 from google.oauth2 import service_account
 
-import sys
-sys.path.append('leukemic_cell_detective_project')
-
 
 from bg_loader import add_bg_from_local
 from leukemic_det.ml_logic.data_classification import show_img, predict
