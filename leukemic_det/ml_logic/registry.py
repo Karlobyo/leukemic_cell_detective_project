@@ -7,7 +7,7 @@ from google.oauth2 import service_account
 from leukemic_det.params import *
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def load_model():
     """
     Loads model from local directly or from gcs
@@ -23,13 +23,16 @@ def load_model():
         if UI == "local":
 
             client = storage.Client()
-            bucket = client(BUCKET_NAME)
+            #breakpoint()
+            bucket = client.bucket(BUCKET_NAME)
 
             blobs = list(client.get_bucket(bucket).list_blobs(prefix="models"))
 
             try:
                 latest_blob = max(blobs, key=lambda x: x.updated)
-                latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name)
+
+                latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name).replace("models/", "")
+                #breakpoint()
                 latest_blob.download_to_filename(latest_model_path_to_save)
 
                 latest_model = tf.keras.models.load_model(latest_model_path_to_save)
@@ -71,3 +74,8 @@ def load_model():
                 print(f"\n❌ No model found in GCS bucket {bucket}")
 
                 return None
+
+
+
+if __name__=='__main__':
+    load_model()
