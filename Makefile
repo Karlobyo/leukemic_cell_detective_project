@@ -4,7 +4,7 @@
 # install
 
 reinstall_package:
-	@pip uninstall -y leukemic_det
+	@pip uninstall -y leukemic-det
 	@pip install -e .
 
 
