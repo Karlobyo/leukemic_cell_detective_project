@@ -8,7 +8,7 @@ import numpy as np
 from google.cloud import storage
 from google.oauth2 import service_account
 
-from leukemic_det.ml_logic.load_dir.bg_loader import add_bg_from_local
+from bg_loader import add_bg_from_local
 #from leukemic_det.ml_logic.data_classification import show_img, predict
 #from leukemic_det.ml_logic.registry import load_model
 
