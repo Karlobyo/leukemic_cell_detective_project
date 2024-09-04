@@ -8,10 +8,16 @@
 
 FROM python:3.10.6-buster
 
-WORKDIR /prod
+#WORKDIR /prod
+
+# RUN apt-get update && apt-get install -y \
+# libhdf5-dev \
+# && rm -rf /var/lib/apt/lists/*
+
 
 # We strip the requirements from useless packages like `ipykernel`, `matplotlib` etc...
-COPY requirements.txt requirements.txt
+COPY requirements_prod.txt requirements.txt
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 COPY leukemic_det leukemic_det
