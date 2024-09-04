@@ -31,6 +31,25 @@ def get_imgs_paths():
     return imgs_paths
 
 
+@st.cache_data(show_spinner=False)
+def show_img_prelim(img_sample : int):
+
+    test_folder = bucket.blob("C-NMC_Leukemia/testing_data/C-NMC_test_prelim_phase_data")
+    test_image_paths = []
+    for blob in bucket.list_blobs(prefix=test_folder.name):
+        image_path = blob.name
+        test_image_paths.append(image_path)
+
+    test_imgs =[]
+
+    blob = bucket.blob(test_image_paths[img_sample])
+    image_bytes = blob.download_as_bytes()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    test_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    test_imgs.append(test_img)
+
+    return test_imgs
+
 
 @st.cache_data(show_spinner=False)
 def show_img(img_sample : int):
