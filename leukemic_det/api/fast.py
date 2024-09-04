@@ -49,24 +49,25 @@ def predict(img_sample : int):
         return {"The sample cell is":'Malignant'}
 
 
-# @app.post("/classify")
-# async def classify(image: UploadFile=File(...)):
+@app.post("/classify") # you need a post request when you want to send anything to the server (an image in this case)
+async def classify(image: UploadFile=File(...)): # async funcs allow processes to run in parallel, in this case you will be able to have the API endpoint available while waiting for the user to upload the image. As long as the image is not processed the following code won't be executed, thanks to the await keyword
 
-#     file_bytes = np.asarray(bytearray(image.read()), dtype=np.uint8)
-#     image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+    file_bytes = np.asarray(bytearray(await image.read()), dtype=np.uint8)
+    image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
 
-#     # predict uploaded image
+    # predict uploaded image
 
-#     u = np.resize((image_u), (450, 450, 3))
-#     resized_u = np.array(u)
+    u = np.resize((image_u), (450, 450, 3))
+    resized_u = np.array(u)
 
-#     X_pred = np.expand_dims(resized_u, 0)
-#     y_pred = model.predict(np.array(X_pred))
+    X_pred = np.expand_dims(resized_u, 0)
+    y_pred = model.predict(np.array(X_pred))
 
-#     predicted_class_u = (y_pred > 0.5).astype(int)
+    predicted_class_u = (y_pred > 0.5).astype(int)
 
 
-#     if predicted_class_u == 0:
-#         return {"The sample cell is":'Healthy'}
-#     else:
-#         return {"The sample cell is":'Malignant'}
+    if predicted_class_u == 0:
+        return {"The sample cell is":'Healthy'}
+    else:
+        return {"The sample cell is":'Malignant'}
+
