@@ -150,30 +150,38 @@ uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
 if uploaded_file is not None:
 
     # decode
-    #file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    #image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
 
-    image_u = Image.open(uploaded_file)
+    #image_u = Image.open(uploaded_file)
 
     # display uploaded image
     st.image(image_u, width=200, channels="BGR", caption='uploaded image')
 
-    if URL:
+    # if URL:
 
-        if st.button('Classify'):
-            with st.spinner('Classifying...'):
-                # Construct the payload
-                image_bytes = uploaded_file.read()
-                files = {'file': (image_bytes)}
-                response = requests.post(f"{URL}/classify", files=files)
+    #     if st.button('Classify'):
+    #         with st.spinner('Classifying...'):
+    #             # Construct the payload
+    #             image_bytes = uploaded_file.read()
+    #             files = {'file': (uploaded_file.name, image_bytes, uploaded_file.type)}
+    #             response = requests.post(f"{URL}/classify", files=files)
 
-                # Check for response status
-                if response.status_code == 200:
-                    result = response.json()
-                    # Display the classification result
-                    st.success(f"Classification Result: {result['label']}")
-                else:
-                    st.error(f"Error: {response.status_code} - {response.text}")
+    #             # Check for response status
+    #             if response.status_code == 200:
+    #                 result = response.json()
+
+    #                 predicted_class_u = result
+
+    #                 if predicted_class_u == 0:
+    #                     st.write('Healthy')
+    #                 else:
+    #                     st.write('Malignant')
+
+    #                 # Display the classification result
+    #                 #st.success(f"Classification Result: {result['label']}")
+    #             else:
+    #                 st.error(f"Error: {response.status_code} - {response.text}")
 
     # classify uploaded image
     predicted_class_u = predict(image_u)
