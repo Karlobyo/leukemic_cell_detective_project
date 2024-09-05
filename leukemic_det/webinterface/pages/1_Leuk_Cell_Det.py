@@ -1,12 +1,10 @@
 import streamlit as st
 import requests
+import numpy as np
 
 import tensorflow as tf
 
-from PIL import Image
 import cv2 as cv
-
-import numpy as np
 
 from google.cloud import storage
 from google.oauth2 import service_account
@@ -16,8 +14,9 @@ from bg_loader import add_bg_from_local
 #from leukemic_det.ml_logic.registry import load_model
 
 
-URL = "http://127.0.0.1:8000"
-#URL = ""
+URL = "" # without API
+#URL = "http://127.0.0.1:8000" # for local API testing
+
 
 # Retrieve the gcp account secrets
 service_account_info = st.secrets["gcp_service_account"]
