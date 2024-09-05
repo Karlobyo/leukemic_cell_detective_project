@@ -84,7 +84,6 @@ def predict(X_pred):
 
 
 
-
 st.set_page_config(layout='wide')
 
 

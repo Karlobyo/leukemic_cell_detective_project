@@ -2,7 +2,6 @@ import numpy as np
 import tensorflow
 
 from PIL import Image
-import cv2 as cv
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, File
@@ -19,10 +18,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
+# load model from local directory and cache it
 app.state.model = tensorflow.keras.models.load_model("leukemic_det/api/model_dir/20240312-114546.h5")
-
 model = app.state.model
+
 
 @app.get("/")
 def root():
