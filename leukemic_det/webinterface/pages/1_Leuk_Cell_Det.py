@@ -122,10 +122,11 @@ selected_img_number = st.selectbox('', img_number, index=None)
 
 
 if selected_img_number:
-    img = show_img(selected_img_number)
-
-    # display selected image
     with st.spinner('Fishing from the Cloud...🎣'):
+
+        img = show_img(selected_img_number)
+
+        # display selected image
         st.image(img, width=200, caption=f'Human white blood cell #{selected_img_number}')
 
     if URL != "":
