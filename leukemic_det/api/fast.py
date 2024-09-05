@@ -60,7 +60,7 @@ async def classify(image: UploadFile=File(...)): # async funcs allow processes t
 
     # predict uploaded image
 
-    u = np.resize((image), (450, 450, 3))
+    u = np.resize((image_u), (450, 450, 3))
     resized_u = np.array(u)
 
     X_pred = np.expand_dims(resized_u, 0)
@@ -73,3 +73,6 @@ async def classify(image: UploadFile=File(...)): # async funcs allow processes t
         return {"The sample cell is":'Healthy'}
     else:
         return {"The sample cell is":'Malignant'}
+
+
+

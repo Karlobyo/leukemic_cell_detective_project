@@ -16,8 +16,8 @@ from bg_loader import add_bg_from_local
 #from leukemic_det.ml_logic.registry import load_model
 
 
-URL = "http://127.0.0.1:8000"
-
+#URL = "http://127.0.0.1:8000"
+URL = ""
 
 # Retrieve the gcp account secrets
 service_account_info = st.secrets["gcp_service_account"]
@@ -151,45 +151,51 @@ if uploaded_file is not None:
 
     # decode
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
-
-    #image_u = Image.open(uploaded_file)
+    image_up = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
 
     # display uploaded image
-    st.image(image_u, width=200, channels="BGR", caption='uploaded image')
+    st.image(image_up, width=200, channels="BGR", caption='uploaded image')
 
-    # if URL:
+    if URL != "":
 
-    #     if st.button('Classify'):
-    #         with st.spinner('Classifying...'):
-    #             # Construct the payload
-    #             image_bytes = uploaded_file.read()
-    #             files = {'file': (uploaded_file.name, image_bytes, uploaded_file.type)}
-    #             response = requests.post(f"{URL}/classify", files=files)
+        if st.button('Classify'):
+            with st.spinner('Loading...'):
+                # Construct the payload
+                uploaded_file.seek(0)  # Reset file pointer to beginning
 
-    #             # Check for response status
-    #             if response.status_code == 200:
-    #                 result = response.json()
+                # Read the image again to send it in the API request
+                image_bytes = uploaded_file.read()
 
-    #                 predicted_class_u = result
+                # Send image file in the request
+                files = {'image': (uploaded_file.name, image_bytes, uploaded_file.type)}
+                response = requests.post(f"{URL}/classify", files=files)
 
-    #                 if predicted_class_u == 0:
-    #                     st.write('Healthy')
-    #                 else:
-    #                     st.write('Malignant')
+                # Check for response status
+                if response.status_code == 200:
 
-    #                 # Display the classification result
-    #                 #st.success(f"Classification Result: {result['label']}")
-    #             else:
-    #                 st.error(f"Error: {response.status_code} - {response.text}")
+                    prediction = response.json()
 
-    # classify uploaded image
-    predicted_class_u = predict(image_u)
+                    st.write(prediction["The sample cell is"])
 
-    if predicted_class_u == 0:
-        st.write('Healthy')
+                else:
+                    st.error(f"Error: {response.status_code} - {response.text}")
     else:
-        st.write('Malignant')
+
+        if st.button('Classify'):
+            with st.spinner('Loading...'):
+
+        # classify uploaded image
+                predicted_class_u = predict(image_up)
+
+                if predicted_class_u == 0:
+                    st.write('Healthy')
+                else:
+                    st.write('Malignant')
+
+
+
+
+
 
 
 st.markdown('')
@@ -197,35 +203,3 @@ st.markdown('')
 st.markdown('')
 
 st.markdown('-The model works best if your image shows an individual white blood cell well defined from a black background-')
-
-
-
-# Define the API endpoint
-# api_url = "http://your-api-endpoint.com/classify"
-
-# # Create the file uploader widget in Streamlit
-# st.title("Image Classification App")
-# uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-
-# if uploaded_file is not None:
-#     # Display the uploaded image
-#     image = Image.open(uploaded_file)
-#     st.image(image, caption='Uploaded Image.', use_column_width=True)
-
-#     # Convert the image to bytes for the POST request
-#     image_bytes = uploaded_file.read()
-
-#     # Make the POST request
-#     if st.button('Classify'):
-#         with st.spinner('Classifying...'):
-#             # Construct the payload
-#             files = {'file': (uploaded_file.name, image_bytes, uploaded_file.type)}
-#             response = requests.post(api_url, files=files)
-
-#             # Check for response status
-#             if response.status_code == 200:
-#                 result = response.json()
-#                 # Display the classification result
-#                 st.success(f"Classification Result: {result['label']}")
-#             else:
-#                 st.error(f"Error: {response.status_code} - {response.text}")
