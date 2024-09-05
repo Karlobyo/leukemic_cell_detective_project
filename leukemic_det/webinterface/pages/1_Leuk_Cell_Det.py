@@ -15,8 +15,8 @@ from bg_loader import add_bg_from_local
 #from leukemic_det.ml_logic.registry import load_model
 
 
-#URL = "" # without API
-URL = "http://127.0.0.1:8000" # for local API testing
+URL = "" # without API
+#URL = "http://127.0.0.1:8000" # for local API testing
 
 
 # Retrieve the gcp account secrets
