@@ -4,6 +4,7 @@ import numpy as np
 
 import tensorflow as tf
 
+from PIL import Image
 import cv2 as cv
 
 from google.cloud import storage
@@ -30,7 +31,7 @@ client = storage.Client(project=service_account_info["project_id"], credentials=
 bucket = client.bucket(bucket)
 
 
-# functions if module import dont work
+# functions for non-modular version
 
 @st.cache_data(show_spinner=False)
 def get_imgs_paths():
@@ -176,8 +177,10 @@ uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png", "bmp"])
 if uploaded_file is not None:
 
     # decode
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image_up = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+    #file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    #image_up = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+
+    image_up = Image.open(uploaded_file)
 
     # display uploaded image
     st.image(image_up, width=200, channels="BGR", caption='uploaded image')
