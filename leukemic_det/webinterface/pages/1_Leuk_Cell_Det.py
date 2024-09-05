@@ -125,11 +125,12 @@ if selected_img_number:
     img = show_img(selected_img_number)
 
     # display selected image
-    st.image(img, width=200, caption=f'Human white blood cell #{selected_img_number}')
+    with st.spinner('Fishing from the Cloud...🎣'):
+        st.image(img, width=200, caption=f'Human white blood cell #{selected_img_number}')
 
     if URL != "":
 
-        if st.button('Classify selected image'):
+        if st.button('Classify selected image 🔬'):
             with st.spinner('Loading...'):
 
                 params = {'img_sample':selected_img_number}
@@ -148,7 +149,7 @@ if selected_img_number:
 
     else:
 
-        if st.button('Classify selected image'):
+        if st.button('Classify selected image 🔬'):
             with st.spinner('Loading...'):
 
                 # classify selected image
@@ -187,7 +188,7 @@ if uploaded_file is not None:
 
     if URL != "":
 
-        if st.button('Classify uploaded image'):
+        if st.button('Classify uploaded image 🔬'):
             with st.spinner('Loading...'):
                 # Construct the payload
                 uploaded_file.seek(0)  # Reset file pointer to beginning
@@ -212,7 +213,7 @@ if uploaded_file is not None:
 
     else:
 
-        if st.button('Classify uploaded image'):
+        if st.button('Classify uploaded image 🔬'):
             with st.spinner('Loading...'):
 
         # classify uploaded image
