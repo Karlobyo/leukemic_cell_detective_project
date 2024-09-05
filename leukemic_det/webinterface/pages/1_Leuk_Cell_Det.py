@@ -16,8 +16,8 @@ from bg_loader import add_bg_from_local
 #from leukemic_det.ml_logic.registry import load_model
 
 
-#URL = "http://127.0.0.1:8000"
-URL = ""
+URL = "http://127.0.0.1:8000"
+#URL = ""
 
 # Retrieve the gcp account secrets
 service_account_info = st.secrets["gcp_service_account"]
@@ -127,14 +127,41 @@ if selected_img_number:
     # display selected image
     st.image(img, width=200, caption=f'Human white blood cell #{selected_img_number}')
 
-    # classify selected image
-    predicted_class = predict(img)
+    if URL != "":
 
-    if predicted_class == 0:
-        st.write('Healthy')
+        if st.button('Classify selected image'):
+            with st.spinner('Loading...'):
+
+                params = {'img_sample':selected_img_number}
+                response = requests.get(f"{URL}/predict", params=params)
+
+                # Check for response status
+                if response.status_code == 200:
+
+                    prediction = response.json()
+
+                    st.write(prediction["The sample cell is"])
+
+                else:
+                    st.error(f"Error: {response.status_code} - {response.text}")
+
+
     else:
-        st.write('Malignant')
 
+        if st.button('Classify selected image'):
+            with st.spinner('Loading...'):
+
+                # classify selected image
+                predicted_class = predict(img)
+
+                if predicted_class == 0:
+                    st.write('Healthy')
+                else:
+                    st.write('Malignant')
+
+
+
+st.markdown('')
 
 # image uploader
 st.markdown('')
@@ -158,7 +185,7 @@ if uploaded_file is not None:
 
     if URL != "":
 
-        if st.button('Classify'):
+        if st.button('Classify uploaded image'):
             with st.spinner('Loading...'):
                 # Construct the payload
                 uploaded_file.seek(0)  # Reset file pointer to beginning
@@ -179,9 +206,11 @@ if uploaded_file is not None:
 
                 else:
                     st.error(f"Error: {response.status_code} - {response.text}")
+
+
     else:
 
-        if st.button('Classify'):
+        if st.button('Classify uploaded image'):
             with st.spinner('Loading...'):
 
         # classify uploaded image
@@ -191,8 +220,6 @@ if uploaded_file is not None:
                     st.write('Healthy')
                 else:
                     st.write('Malignant')
-
-
 
 
 
