@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow
 
+from PIL import Image
 import cv2 as cv
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,19 +35,21 @@ def predict(img_sample : int):
     Make a single image prediction
     Assumes `img_sample' is provided as an integer index by the user
     """
+    # retrieve testing images never seen by the model
+    imgs = show_img_prelim(img_sample)
 
-    im = show_img_prelim(img_sample)
+    # small preproc
+    resized = np.resize((imgs), (450, 450, 3))
+    X_pred = np.expand_dims(resized, 0)
 
-    u = np.resize((im), (450, 450, 3))
-    resized_u = np.array(u)
-
-    X_pred = np.expand_dims(resized_u, 0)
-
+    # classify
     y_pred = model.predict(X_pred)
 
-    predicted_class = (y_pred > 0.5).astype(int)
+    # set threshold
+    prediction = (y_pred > 0.5).astype(int)
 
-    if predicted_class == 0:
+    # parse the reponse
+    if prediction == 0:
         return {"The sample cell is":'Healthy'}
     else:
         return {"The sample cell is":'Malignant'}
@@ -55,24 +58,21 @@ def predict(img_sample : int):
 @app.post("/classify") # you need a post request when you want to send anything to the server (an image in this case)
 async def classify(image: UploadFile=File(...)): # async funcs allow processes to run in parallel, in this case you will be able to have the API endpoint available while waiting for the user to upload the image. As long as the image is not processed the following code won't be executed, thanks to the await keyword
 
-    file_bytes = np.asarray(bytearray(await image.read()), dtype=np.uint8)
-    image_u = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
+    # decode uploaded image
+    image_up = Image.open(image)
 
-    # predict uploaded image
+    # small preproc
+    resized = np.resize((image_up), (450, 450, 3))
+    X_pred = np.expand_dims(resized, 0) # add the batch dimension required by CNNs
 
-    u = np.resize((image_u), (450, 450, 3))
-    resized_u = np.array(u)
+    # classify
+    y_pred = model.predict(X_pred)
 
-    X_pred = np.expand_dims(resized_u, 0)
-    y_pred = model.predict(np.array(X_pred))
+    # set threshold
+    prediction = (y_pred > 0.5).astype(int)
 
-    predicted_class_u = (y_pred > 0.5).astype(int)
-
-
-    if predicted_class_u == 0:
+    # parse the reponse
+    if prediction == 0:
         return {"The sample cell is":'Healthy'}
     else:
         return {"The sample cell is":'Malignant'}
-
-
-
