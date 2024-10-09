@@ -33,16 +33,6 @@ leukemic_det/models/new_cnn_simple/keras_metadata.pb
 leukemic_det/models/new_cnn_simple/saved_model.pb
 leukemic_det/models/new_cnn_simple/variables/variables.data-00000-of-00001
 leukemic_det/models/new_cnn_simple/variables/variables.index
-leukemic_det/webinterface/app_cloud.py
-leukemic_det/webinterface/app_local.py
-leukemic_det/webinterface/app_local_batches.py
-leukemic_det/webinterface/images/lympho.png
-leukemic_det/webinterface/model_dir/20240312-114546.h5
-leukemic_det/webinterface/new_cnn_simple/fingerprint.pb
-leukemic_det/webinterface/new_cnn_simple/keras_metadata.pb
-leukemic_det/webinterface/new_cnn_simple/saved_model.pb
-leukemic_det/webinterface/new_cnn_simple/variables/variables.data-00000-of-00001
-leukemic_det/webinterface/new_cnn_simple/variables/variables.index
 notebooks/Leukemic_cell_detective_cloud.ipynb
 notebooks/Leukemic_cell_detective_colab.ipynb
 pics/C-NMC_Leukemia_testing_data_C-NMC_test_prelim_phase_data_1002.bmp
